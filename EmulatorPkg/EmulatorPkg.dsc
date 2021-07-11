@@ -331,6 +331,7 @@
   ##
   #  DXE Phase modules
   ##
+  DumpToolPkg/AdlGpio/AdlGpio.inf
   MdeModulePkg/Core/Dxe/DxeMain.inf {
     <LibraryClasses>
       DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf

@@ -1,0 +1,8 @@
+
+[Defines]
+  DEC_SPECIFICATION              = 0x00010005
+  PACKAGE_NAME                   = DumpToolPkg
+  PACKAGE_GUID                   = 48472895-B3C0-4FD5-69C0-36B795F2FA76
+  PACKAGE_VERSION                = 0.1
+
+[Includes]
