@@ -331,6 +331,8 @@
   ##
   #  DXE Phase modules
   ##
+  DumpToolPkg/HobList/HobList.inf
+  DumpToolPkg/ApiTest/ApiTest.inf
   DumpToolPkg/AdlGpio/AdlGpio.inf
   MdeModulePkg/Core/Dxe/DxeMain.inf {
     <LibraryClasses>

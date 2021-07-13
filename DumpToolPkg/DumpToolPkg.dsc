@@ -79,6 +79,8 @@
 
 [Components]
   DumpToolPkg/AdlGpio/AdlGpio.inf
+  DumpToolPkg/ApiTest/ApiTest.inf
+  DumpToolPkg/HobList/HobList.inf
 
 [BuildOptions]
   MSVC:DEBUG_*_*_DLINK_FLAGS = /EXPORT:InitializeDriver=$(IMAGE_ENTRY_POINT) /BASE:0x10000 /ALIGN:4096 /FILEALIGN:4096 /SUBSYSTEM:CONSOLE
