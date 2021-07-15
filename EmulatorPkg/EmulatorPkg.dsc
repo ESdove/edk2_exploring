@@ -331,6 +331,7 @@
   ##
   #  DXE Phase modules
   ##
+  DumpToolPkg/DumpHandle/DumpHandle.inf
   DumpToolPkg/HobList/HobList.inf
   DumpToolPkg/ApiTest/ApiTest.inf
   DumpToolPkg/AdlGpio/AdlGpio.inf
