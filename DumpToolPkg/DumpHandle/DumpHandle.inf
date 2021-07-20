@@ -40,6 +40,7 @@
   MemoryAllocationLib
   DxeServicesTableLib
   HobLib
+  DevicePathLib
 
 [FeaturePcd]
   #gEfiMdeModulePkgTokenSpaceGuid.PcdHelloWorldPrintEnable   ## CONSUMES

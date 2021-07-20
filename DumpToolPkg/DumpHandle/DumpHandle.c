@@ -10,6 +10,7 @@
 #include <Library/HobLib.h>
 #include <Library/PcdLib.h>
 #include <Library/UefiApplicationEntryPoint.h>
+#include <Library/DevicePathLib.h>
 #include <Protocol/Shell.h>
 #include <Protocol/ShellParameters.h>
 #include <Guid/HobList.h>
@@ -94,6 +95,8 @@ DumpHandle
   UINTN                 NoHandles;
   EFI_HANDLE            *HandleBuffer;
   UINTN                 Index;
+  CHAR16                *PathStr;
+  EFI_LOADED_IMAGE_PROTOCOL  *LoadedImage;
 
   GetShellProtocol();
     
@@ -135,11 +138,21 @@ DumpHandle
                   &NoHandles,
                   &HandleBuffer
                   );
-
+  
       Print(L"NoHandles = %d\n",NoHandles);
       for(Index = 0; Index < NoHandles; Index++)
       {
-        Print(L"%-3d --- IHANDLE BA = 0X%X\n",Index+1,HandleBuffer[Index]);
+            Status = gBS->HandleProtocol(
+                    HandleBuffer[Index],
+                    &gEfiLoadedImageProtocolGuid,
+                    (VOID **)&LoadedImage
+                    );
+            if (EFI_ERROR(Status)) {
+              continue;
+            }
+        PathStr = ConvertDevicePathToText(LoadedImage->FilePath, TRUE, TRUE);
+        Print(L"%-3d --- IHANDLE BA = 0X%X --- %s\n",Index+1,HandleBuffer[Index],PathStr);
+      
       }
   } 
    else if(Argc ==2 && ((StrCmp(Argv[1], L"-gEfiSimpleFileSystemProtocolGuid") == 0)))
