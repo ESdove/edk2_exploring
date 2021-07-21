@@ -335,6 +335,7 @@
   DumpToolPkg/HobList/HobList.inf
   DumpToolPkg/ApiTest/ApiTest.inf
   DumpToolPkg/AdlGpio/AdlGpio.inf
+  DumpToolPkg/DumpEfiLoadImage/DumpEfiLoadImage.inf
   MdeModulePkg/Core/Dxe/DxeMain.inf {
     <LibraryClasses>
       DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
