@@ -47,6 +47,7 @@ extern CHAR16 **Argv;
 extern EFI_SHELL_PROTOCOL *mShellProtocol;
 extern EFI_SHELL_PROTOCOL *GetShellProtocol(VOID);
 extern EFI_STATUS GetArg(VOID);
+LIST_ENTRY                *mDxeCoreHandleList;
 
 VOID ToolInfo(VOID)
 {
@@ -56,9 +57,9 @@ VOID ToolInfo(VOID)
 }
 
 VOID PrintUsage(VOID)
-{
+{  
+  Print(L"-All -Detail  Dump All Handles for Details\n");
   Print(L"-All      Dump All Handles\n");
-  Print(L"-All -d   Dump All Handles for Details\n");
   Print(L"-gEfiLoadImageProtocolGuid\n");
   Print(L"-gEfiFirmwareVolume2ProtocolGuid\n");
   Print(L"-gEfiGraphicsOutputProtocolGuid\n");
@@ -82,7 +83,60 @@ VOID PrintUsage(VOID)
   Print(L"-gEfiUnicodeCollation2ProtocolGuid\n");
 }
 
+VOID
+GetDxeCoreHandleList(
+  IN IHANDLE    *IHandle
+  )
+{
+  LIST_ENTRY      *ListEntry;
+  IHANDLE         *Handle;
 
+  ListEntry = &IHandle->AllHandles;
+  for (ListEntry = ListEntry->ForwardLink;
+       ListEntry != &IHandle->AllHandles;
+       ListEntry = ListEntry->ForwardLink) {
+    Handle = BASE_CR(ListEntry, IHANDLE, AllHandles);
+    if (Handle->Signature != EFI_HANDLE_SIGNATURE) {
+    
+      mDxeCoreHandleList = ListEntry;
+      Print(L"###################################################\n");
+      Print(L"########## mDxeCoreHandList = 0X%X ##########\n",mDxeCoreHandleList);
+      Print(L"###################################################\n\n");
+      break;
+    }
+  }
+
+  return;
+}
+
+VOID
+DumpHandleList(
+  VOID
+  )
+{
+  LIST_ENTRY      *ListEntry;
+  IHANDLE         *Handle;
+  UINTN           Index;
+
+  ListEntry = mDxeCoreHandleList;
+  for (ListEntry = ListEntry->ForwardLink,Index = 0;
+       ListEntry != mDxeCoreHandleList;
+       ListEntry = ListEntry->ForwardLink,Index++) {
+    Handle = CR(ListEntry, IHANDLE, AllHandles, EFI_HANDLE_SIGNATURE);
+    Print(L"%-4d Handle - BA = 0X%X\n", Index + 1,Handle);
+    Print(L"     Signature = 0X%X\n",Handle->Signature);
+    Print(L"     AllHandles ForwardLink = 0X%X BackLink = 0X%X\n",
+                 Handle->AllHandles.ForwardLink,
+                 Handle->AllHandles.BackLink);
+    Print(L"     Protocol   ForWardLink = 0X%X BackLink = 0X%X\n",
+                 Handle->Protocols.ForwardLink,
+                 Handle->Protocols.BackLink);
+    Print(L"     LocateRequest = %d\n",Handle->LocateRequest);
+    Print(L"     Key = %d\n\n",Handle->Key); 
+  }
+
+  return;
+}
 
 
 EFI_STATUS
@@ -110,12 +164,16 @@ DumpHandle
     return EFI_SUCCESS;
   } 
   
-  else if(Argc ==2 && ((StrCmp(Argv[1], L"--help") == 0)))
+  else if(Argc == 2 && ((StrCmp(Argv[1], L"--help") == 0)))
   {
       PrintUsage();
   } 
-  
-   else if((Argc ==2 || Argc == 3) && ((StrCmp(Argv[1], L"-All") == 0)))
+  else if(Argc == 3 && (StrCmp(Argv[1],L"-All") == 0) && (StrCmp(Argv[2],L"-Detail") == 0))
+  {
+     GetDxeCoreHandleList((IHANDLE *)ImageHandle);
+     DumpHandleList();
+  }
+   else if((Argc ==2) && ((StrCmp(Argv[1], L"-All") == 0)))
   {
        Status = gBS->LocateHandleBuffer(
                 AllHandles,
@@ -127,26 +185,27 @@ DumpHandle
       Print(L"AllHandles NoHandles = %d sizeof(IHANDLE) = %d\n",NoHandles,sizeof(IHANDLE));
       for(Index = 0; Index < NoHandles; Index++)
       {
-        Print(L"%-4d --- IHANDLE BA = 0X%X\n",Index+1,HandleBuffer[Index]);
+        Print(L"%-4d IHANDLE - BA = 0X%X\n",Index+1,HandleBuffer[Index]);
 
-        if(Argc == 3 && (StrCmp(Argv[2],L"-d")) == 0)
-        {
-          Print(L"    Signature = 0X%X\n",((IHANDLE *)(HandleBuffer[Index]))->Signature);
-          Print(L"    AllHandles ForwardLink = 0X%X BackLink = 0X%X\n",
-                *(((IHANDLE *)(HandleBuffer[Index]))->AllHandles.ForwardLink),
-                *(((IHANDLE *)(HandleBuffer[Index]))->AllHandles.BackLink));
-          Print(L"    Protocol ForWardLink =  0X%X  BackLink = 0X%X\n",
-                *(((IHANDLE *)(HandleBuffer[Index]))->Protocols.ForwardLink),
-                *(((IHANDLE *)(HandleBuffer[Index]))->Protocols.BackLink));
-          Print(L"    LocateRequest = %d\n",
-          ((IHANDLE *)(HandleBuffer[Index]))->LocateRequest);
-          Print(L"    Key = %d\n",
-          ((IHANDLE *)(HandleBuffer[Index]))->Key); 
+       
+        // {
+        //   Print(L"    Signature = 0X%X\n",((IHANDLE *)(HandleBuffer[Index]))->Signature);
+        //   Print(L"    AllHandles ForwardLink = 0X%X BackLink = 0X%X\n",
+        //         (((IHANDLE *)(HandleBuffer[Index]))->AllHandles.ForwardLink),
+        //         (((IHANDLE *)(HandleBuffer[Index]))->AllHandles.BackLink));
+        //   Print(L"    Protocol ForWardLink =  0X%X  BackLink = 0X%X\n",
+        //         (((IHANDLE *)(HandleBuffer[Index]))->Protocols.ForwardLink),
+        //         (((IHANDLE *)(HandleBuffer[Index]))->Protocols.BackLink));
+        //   Print(L"    LocateRequest = %d\n",
+        //   ((IHANDLE *)(HandleBuffer[Index]))->LocateRequest);
+        //   Print(L"    Key = %d\n",
+        //   ((IHANDLE *)(HandleBuffer[Index]))->Key); 
 
-        }
-      } 
-  }  
-
+        //  }
+      }
+      gBS->FreePool(HandleBuffer);
+  } 
+   
    else if(Argc ==2 && ((StrCmp(Argv[1], L"-gEfiLoadImageProtocolGuid") == 0)))
   {
        Status = gBS->LocateHandleBuffer(
@@ -172,6 +231,7 @@ DumpHandle
         Print(L"%-3d --- IHANDLE BA = 0X%X --- %s\n",Index+1,HandleBuffer[Index],PathStr);
       
       }
+      gBS->FreePool(HandleBuffer);
   } 
    else if(Argc ==2 && ((StrCmp(Argv[1], L"-gEfiSimpleFileSystemProtocolGuid") == 0)))
   {
@@ -187,8 +247,9 @@ DumpHandle
       Print(L"NoHandles = %d\n",NoHandles);
       for(Index = 0; Index < NoHandles; Index++)
       {
-        Print(L"%-4d --- IHANDLE BA = 0X%X\n",Index+1,HandleBuffer[Index]);
+        Print(L"%-4d IHANDLE - BA = 0X%X\n",Index+1,HandleBuffer[Index]);
       } 
+      gBS->FreePool(HandleBuffer);
   }
   
    else if(Argc ==2 && ((StrCmp(Argv[1], L"-gEfiFirmwareVolume2ProtocolGuid") == 0)))
@@ -204,8 +265,9 @@ DumpHandle
       Print(L"NoHandles = %d\n",NoHandles);
       for(Index = 0; Index < NoHandles; Index++)
       {
-        Print(L"%-4d --- IHANDLE BA = 0X%X\n",Index+1,HandleBuffer[Index]);
+        Print(L"%-4d IHANDLE - BA = 0X%X\n",Index+1,HandleBuffer[Index]);
       } 
+      gBS->FreePool(HandleBuffer);
    }  
   
    else if(Argc ==2 && ((StrCmp(Argv[1], L"-gEfiGraphicsOutputProtocolGuid") == 0)))
@@ -221,8 +283,9 @@ DumpHandle
       Print(L"NoHandles = %d\n",NoHandles);
       for(Index = 0; Index < NoHandles; Index++)
       {
-        Print(L"%-4d --- IHANDLE BA = 0X%X\n",Index+1,HandleBuffer[Index]);
+        Print(L"%-4d IHANDLE - BA = 0X%X\n",Index+1,HandleBuffer[Index]);
       }
+      gBS->FreePool(HandleBuffer);
    }
 
    else if(Argc ==2 && ((StrCmp(Argv[1], L"-gEfiLoadFileProtocolGuid") == 0)))
@@ -238,8 +301,9 @@ DumpHandle
       Print(L"NoHandles = %d\n",NoHandles);
       for(Index = 0; Index < NoHandles; Index++)
       {
-        Print(L"%-4d --- IHANDLE BA = 0X%X\n",Index+1,HandleBuffer[Index]);
+        Print(L"%-4d IHANDLE - BA = 0X%X\n",Index+1,HandleBuffer[Index]);
       }
+      gBS->FreePool(HandleBuffer);
    } 
    else if(Argc ==2 && ((StrCmp(Argv[1], L"-gEfiFirmwareVolumeBlockProtocolGuid") == 0)))
   {
@@ -255,8 +319,9 @@ DumpHandle
       Print(L"NoHandles = %d\n",NoHandles);
       for(Index = 0; Index < NoHandles; Index++)
       {
-        Print(L"%-4d --- IHANDLE BA = 0X%X\n",Index+1,HandleBuffer[Index]);
+        Print(L"%-4d IHANDLE - BA = 0X%X\n",Index+1,HandleBuffer[Index]);
       }
+      gBS->FreePool(HandleBuffer);
   } 
   
    else if(Argc ==2 && ((StrCmp(Argv[1], L"-gEfiDriverBindingProtocolGuid") == 0)))
@@ -272,8 +337,9 @@ DumpHandle
       Print(L"NoHandles = %d\n",NoHandles);
       for(Index = 0; Index < NoHandles; Index++)
       {
-        Print(L"%-4d --- IHANDLE BA = 0X%X\n",Index+1,HandleBuffer[Index]);
+        Print(L"%-4d IHANDLE - BA = 0X%X\n",Index+1,HandleBuffer[Index]);
       }
+      gBS->FreePool(HandleBuffer);
   } 
   
    else if(Argc ==2 && ((StrCmp(Argv[1], L"-gEfiHiiImageDecoderProtocolGuid") == 0)))
@@ -289,8 +355,9 @@ DumpHandle
       Print(L"NoHandles = %d\n",NoHandles);
       for(Index = 0; Index < NoHandles; Index++)
       {
-        Print(L"%-4d --- IHANDLE BA = 0X%X\n",Index+1,HandleBuffer[Index]);
+        Print(L"%-4d IHANDLE - BA = 0X%X\n",Index+1,HandleBuffer[Index]);
       }
+      gBS->FreePool(HandleBuffer);
   } 
    else if(Argc ==2 && ((StrCmp(Argv[1], L"-gEfiSimpleTextInProtocolGuid") == 0)))
   {
@@ -305,8 +372,9 @@ DumpHandle
       Print(L"NoHandles = %d\n",NoHandles);
       for(Index = 0; Index < NoHandles; Index++)
       {
-        Print(L"%-4d --- IHANDLE BA = 0X%X\n",Index+1,HandleBuffer[Index]);
+        Print(L"%-4d IHANDLE - BA = 0X%X\n",Index+1,HandleBuffer[Index]);
       }
+      gBS->FreePool(HandleBuffer);
   } 
    else if(Argc ==2 && ((StrCmp(Argv[1], L"-gEfiSimplePointerProtocolGuid") == 0)))
   {
@@ -321,8 +389,9 @@ DumpHandle
       Print(L"NoHandles = %d\n",NoHandles);
       for(Index = 0; Index < NoHandles; Index++)
       {
-        Print(L"%-4d --- IHANDLE BA = 0X%X\n",Index+1,HandleBuffer[Index]);
+        Print(L"%-4d IHANDLE - BA = 0X%X\n",Index+1,HandleBuffer[Index]);
       }
+      gBS->FreePool(HandleBuffer);
   } 
    else if(Argc ==2 && ((StrCmp(Argv[1], L"-gEfiPciIoProtocolGuid") == 0)))
   {
@@ -337,8 +406,9 @@ DumpHandle
       Print(L"NoHandles = %d\n",NoHandles);
       for(Index = 0; Index < NoHandles; Index++)
       {
-        Print(L"%-4d --- IHANDLE BA = 0X%X\n",Index+1,HandleBuffer[Index]);
+        Print(L"%-4d IHANDLE - BA = 0X%X\n",Index+1,HandleBuffer[Index]);
       }
+      gBS->FreePool(HandleBuffer);
   } 
    else if(Argc ==2 && ((StrCmp(Argv[1], L"-gEfiPciRootBridgeIoProtocolGuid") == 0)))
   {
@@ -353,8 +423,9 @@ DumpHandle
       Print(L"NoHandles = %d\n",NoHandles);
       for(Index = 0; Index < NoHandles; Index++)
       {
-        Print(L"%-4d --- IHANDLE BA = 0X%X\n",Index+1,HandleBuffer[Index]);
+        Print(L"%-4d IHANDLE - BA = 0X%X\n",Index+1,HandleBuffer[Index]);
       }
+      gBS->FreePool(HandleBuffer);
   } 
    else if(Argc ==2 && ((StrCmp(Argv[1], L"-gEfiSerialIoProtocolGuid") == 0)))
   {
@@ -369,8 +440,9 @@ DumpHandle
       Print(L"NoHandles = %d\n",NoHandles);
       for(Index = 0; Index < NoHandles; Index++)
       {
-        Print(L"%-4d --- IHANDLE BA = 0X%X\n",Index+1,HandleBuffer[Index]);
+        Print(L"%-4d IHANDLE - BA = 0X%X\n",Index+1,HandleBuffer[Index]);
       }
+      gBS->FreePool(HandleBuffer);
   } 
    else if(Argc ==2 && ((StrCmp(Argv[1], L"-gEfiUsbIoProtocolGuid") == 0)))
   {
@@ -385,8 +457,9 @@ DumpHandle
       Print(L"NoHandles = %d\n",NoHandles);
       for(Index = 0; Index < NoHandles; Index++)
       {
-        Print(L"%-4d --- IHANDLE BA = 0X%X\n",Index+1,HandleBuffer[Index]);
+        Print(L"%-4d IHANDLE - BA = 0X%X\n",Index+1,HandleBuffer[Index]);
       }
+      gBS->FreePool(HandleBuffer);
   } 
    else if(Argc ==2 && ((StrCmp(Argv[1], L"-gEfiI2cHostProtocolGuid") == 0)))
   {
@@ -401,8 +474,9 @@ DumpHandle
       Print(L"NoHandles = %d\n",NoHandles);
       for(Index = 0; Index < NoHandles; Index++)
       {
-        Print(L"%-4d --- IHANDLE BA = 0X%X\n",Index+1,HandleBuffer[Index]);
+        Print(L"%-4d IHANDLE - BA = 0X%X\n",Index+1,HandleBuffer[Index]);
       }
+      gBS->FreePool(HandleBuffer);
   } 
    else if(Argc ==2 && ((StrCmp(Argv[1], L"-gEfiSioProtocolGuid") == 0)))
   {
@@ -417,8 +491,9 @@ DumpHandle
       Print(L"NoHandles = %d\n",NoHandles);
       for(Index = 0; Index < NoHandles; Index++)
       {
-        Print(L"%-4d --- IHANDLE BA = 0X%X\n",Index+1,HandleBuffer[Index]);
+        Print(L"%-4d IHANDLE - BA = 0X%X\n",Index+1,HandleBuffer[Index]);
       }
+      gBS->FreePool(HandleBuffer);
   } 
    else if(Argc ==2 && ((StrCmp(Argv[1], L"-gEfiBlockIoProtocolGuid") == 0)))
   {
@@ -433,8 +508,9 @@ DumpHandle
       Print(L"NoHandles = %d\n",NoHandles);
       for(Index = 0; Index < NoHandles; Index++)
       {
-        Print(L"%-4d --- IHANDLE BA = 0X%X\n",Index+1,HandleBuffer[Index]);
+        Print(L"%-4d IHANDLE - BA = 0X%X\n",Index+1,HandleBuffer[Index]);
       }
+      gBS->FreePool(HandleBuffer);
   } 
    else if(Argc ==2 && ((StrCmp(Argv[1], L"-gEfiDiskInfoProtocolGuid") == 0)))
   {
@@ -449,8 +525,9 @@ DumpHandle
       Print(L"NoHandles = %d\n",NoHandles);
       for(Index = 0; Index < NoHandles; Index++)
       {
-        Print(L"%-4d --- IHANDLE BA = 0X%X\n",Index+1,HandleBuffer[Index]);
+        Print(L"%-4d IHANDLE - BA = 0X%X\n",Index+1,HandleBuffer[Index]);
       }
+      gBS->FreePool(HandleBuffer);
   } 
    else if(Argc ==2 && ((StrCmp(Argv[1], L"-gEfiDevicePathProtocolGuid") == 0)))
   {
@@ -465,8 +542,10 @@ DumpHandle
       Print(L"NoHandles = %d\n",NoHandles);
       for(Index = 0; Index < NoHandles; Index++)
       {
-        Print(L"%-4d --- IHANDLE BA = 0X%X\n",Index+1,HandleBuffer[Index]);
+        Print(L"%-4d IHANDLE - BA = 0X%X\n",Index+1,HandleBuffer[Index]);
       }
+      gBS->FreePool(HandleBuffer);
+
   } 
    else if(Argc ==2 && ((StrCmp(Argv[1], L"-gEfiStorageSecurityCommandProtocolGuid") == 0)))
   {
@@ -481,8 +560,9 @@ DumpHandle
       Print(L"NoHandles = %d\n",NoHandles);
       for(Index = 0; Index < NoHandles; Index++)
       {
-        Print(L"%-4d --- IHANDLE BA = 0X%X\n",Index+1,HandleBuffer[Index]);
+        Print(L"%-4d IHANDLE - BA = 0X%X\n",Index+1,HandleBuffer[Index]);
       }
+      gBS->FreePool(HandleBuffer);
   } 
    else if(Argc ==2 && ((StrCmp(Argv[1], L"-gEfiRestExServiceBindingProtocolGuid") == 0)))
   {
@@ -497,8 +577,9 @@ DumpHandle
       Print(L"NoHandles = %d\n",NoHandles);
       for(Index = 0; Index < NoHandles; Index++)
       {
-        Print(L"%-4d --- IHANDLE BA = 0X%X\n",Index+1,HandleBuffer[Index]);
+        Print(L"%-4d IHANDLE - BA = 0X%X\n",Index+1,HandleBuffer[Index]);
       }
+      gBS->FreePool(HandleBuffer);
   } 
    else if(Argc ==2 && ((StrCmp(Argv[1], L"-gEfiUnicodeCollation2ProtocolGuid") == 0)))
   {
@@ -513,14 +594,15 @@ DumpHandle
       Print(L"NoHandles = %d\n",NoHandles);
       for(Index = 0; Index < NoHandles; Index++)
       {
-        Print(L"%-4d --- IHANDLE BA = 0X%X\n",Index+1,HandleBuffer[Index]);
+        Print(L"%-4d IHANDLE - BA = 0X%X\n",Index+1,HandleBuffer[Index]);
       }
+       gBS->FreePool(HandleBuffer);
   } 
 
   else
   {
     Print(L"Invalid command line option(s)\n");
   } 
-
+  
   return EFI_SUCCESS;
 }
