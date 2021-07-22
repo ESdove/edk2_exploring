@@ -16,6 +16,7 @@
 #include <Guid/HobList.h>
 #include <Library/MemoryAllocationLib.h>
 #include <Guid/MemoryAllocationHob.h>
+#include "../../MdeModulePkg/Core/Dxe/Hand/Handle.h"
 
 #include <Protocol/LoadedImage.h>
 #include <Protocol/SimpleFileSystem.h>
@@ -57,6 +58,7 @@ VOID ToolInfo(VOID)
 VOID PrintUsage(VOID)
 {
   Print(L"-All      Dump All Handles\n");
+  Print(L"-All -d   Dump All Handles for Details\n");
   Print(L"-gEfiLoadImageProtocolGuid\n");
   Print(L"-gEfiFirmwareVolume2ProtocolGuid\n");
   Print(L"-gEfiGraphicsOutputProtocolGuid\n");
@@ -113,7 +115,7 @@ DumpHandle
       PrintUsage();
   } 
   
-   else if(Argc ==2 && ((StrCmp(Argv[1], L"-All") == 0)))
+   else if((Argc ==2 || Argc == 3) && ((StrCmp(Argv[1], L"-All") == 0)))
   {
        Status = gBS->LocateHandleBuffer(
                 AllHandles,
@@ -122,10 +124,26 @@ DumpHandle
                 &NoHandles,
                 &HandleBuffer
                 );
-      Print(L"AllHandles NoHandles = %d\n",NoHandles);
+      Print(L"AllHandles NoHandles = %d sizeof(IHANDLE) = %d\n",NoHandles,sizeof(IHANDLE));
       for(Index = 0; Index < NoHandles; Index++)
       {
         Print(L"%-4d --- IHANDLE BA = 0X%X\n",Index+1,HandleBuffer[Index]);
+
+        if(Argc == 3 && (StrCmp(Argv[2],L"-d")) == 0)
+        {
+          Print(L"    Signature = 0X%X\n",((IHANDLE *)(HandleBuffer[Index]))->Signature);
+          Print(L"    AllHandles ForwardLink = 0X%X BackLink = 0X%X\n",
+                *(((IHANDLE *)(HandleBuffer[Index]))->AllHandles.ForwardLink),
+                *(((IHANDLE *)(HandleBuffer[Index]))->AllHandles.BackLink));
+          Print(L"    Protocol ForWardLink =  0X%X  BackLink = 0X%X\n",
+                *(((IHANDLE *)(HandleBuffer[Index]))->Protocols.ForwardLink),
+                *(((IHANDLE *)(HandleBuffer[Index]))->Protocols.BackLink));
+          Print(L"    LocateRequest = %d\n",
+          ((IHANDLE *)(HandleBuffer[Index]))->LocateRequest);
+          Print(L"    Key = %d\n",
+          ((IHANDLE *)(HandleBuffer[Index]))->Key); 
+
+        }
       } 
   }  
 
