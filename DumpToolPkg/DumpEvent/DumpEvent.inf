@@ -1,10 +1,10 @@
 [Defines]
   INF_VERSION                    = 0x00010005
-  BASE_NAME                      = HobList
-  FILE_GUID                      = 3C270A9F-5189-45FD-8495-D24FAF7492E1
+  BASE_NAME                      = DumpEvent
+  FILE_GUID                      = E56A95F2-82BC-490E-93F1-E86BF52A6F86
   MODULE_TYPE                    = UEFI_APPLICATION
   VERSION_STRING                 = 1.0
-  ENTRY_POINT                    = DumpHobList
+  ENTRY_POINT                    = DumpEvent
 
 #
 #  This flag specifies whether HII resource section is generated into PE image.
@@ -18,7 +18,7 @@
 #
 
 [Sources]
-  HobList.c
+  DumpEvent.c
   AppSupport.c
 
 
@@ -40,6 +40,7 @@
   MemoryAllocationLib
   DxeServicesTableLib
   HobLib
+  DevicePathLib
 
 [FeaturePcd]
   #gEfiMdeModulePkgTokenSpaceGuid.PcdHelloWorldPrintEnable   ## CONSUMES
@@ -54,9 +55,12 @@
 [Protocols]
   gEfiShellProtocolGuid
   gEfiShellParametersProtocolGuid
+  gEfiLoadedImageProtocolGuid
 
 [Guids]
   gEfiHobListGuid
   gEfiHobMemoryAllocStackGuid
   gEfiHobMemoryAllocBspStoreGuid
   gEfiHobMemoryAllocModuleGuid
+  gEfiEventReadyToBootGuid
+  

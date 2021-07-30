@@ -332,12 +332,19 @@
   #  DXE Phase modules
   ##
   DumpToolPkg/DumpHandle/DumpHandle.inf
-  DumpToolPkg/HobList/HobList.inf
+  DumpToolPkg/DumpHobList/DumpHobList.inf
   DumpToolPkg/ApiTest/ApiTest.inf
   DumpToolPkg/AdlGpio/AdlGpio.inf
   DumpToolPkg/DumpEfiLoadImage/DumpEfiLoadImage.inf
   DumpToolPkg/DumpProtocolInterface/DumpProtocolInterface.inf
   DumpToolPkg/DumpProtocolDatabase/DumpProtocolDatabase.inf
+  DumpToolPkg/DumpEvent/DumpEvent.inf
+  DumpToolPkg/DxeDriverTest/DxeDriverTest.inf {
+    <LibraryClasses>
+      DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
+      SerialPortLib|EmulatorPkg/Library/DxeEmuStdErrSerialPortLib/DxeEmuStdErrSerialPortLib.inf
+      DxeEmuLib|EmulatorPkg/Library/DxeEmuLib/DxeEmuLib.inf
+  }
   MdeModulePkg/Core/Dxe/DxeMain.inf {
     <LibraryClasses>
       DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf

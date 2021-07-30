@@ -34,7 +34,8 @@
   TimerLib|MdePkg/Library/BaseTimerLibNullTemplate/BaseTimerLibNullTemplate.inf
 
   UefiDriverEntryPoint|MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint.inf
-  DebugLib|MdeModulePkg/Library/PeiDxeDebugLibReportStatusCode/PeiDxeDebugLibReportStatusCode.inf
+  # DebugLib|MdeModulePkg/Library/PeiDxeDebugLibReportStatusCode/PeiDxeDebugLibReportStatusCode.inf
+  DebugLib|MdeModulePkg/Library/UefiDebugLibConOut/UefiDebugLibConOut.inf
   ReportStatusCodeLib|MdeModulePkg/Library/DxeReportStatusCodeLib/DxeReportStatusCodeLib.inf
   DebugPrintErrorLevelLib|MdePkg/Library/BaseDebugPrintErrorLevelLib/BaseDebugPrintErrorLevelLib.inf
 
@@ -80,11 +81,12 @@
 [Components]
   DumpToolPkg/AdlGpio/AdlGpio.inf
   DumpToolPkg/ApiTest/ApiTest.inf
-  DumpToolPkg/HobList/HobList.inf
+  DumpToolPkg/DumpHobList/DumpHobList.inf
   DumpToolPkg/DumpHandle/DumpHandle.inf
   DumpToolPkg/DumpEfiLoadImage/DumpEfiLoadImage.inf
   DumpToolPkg/DumpProtocolInterface/DumpProtocolInterface.inf
   DumpToolPkg/DumpProtocolDatabase/DumpProtocolDatabase.inf
+  DumpToolPkg/DumpEvent/DumpEvent.inf
 
 [BuildOptions]
   MSVC:DEBUG_*_*_DLINK_FLAGS = /EXPORT:InitializeDriver=$(IMAGE_ENTRY_POINT) /BASE:0x10000 /ALIGN:4096 /FILEALIGN:4096 /SUBSYSTEM:CONSOLE
