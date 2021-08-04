@@ -226,7 +226,6 @@ EFI_STATUS EFIAPI DumpEvent
     Print(L"|                           EVENT DATABASE                           |\n");
     Print(L"+--------------------------------------------------------------------+\n");
     // Create Node Event to get gEventSignalQueue
-    //Print(L"1. NOTIFY_SIGNAL \n");
     Status = gBS->CreateEventEx (
                     EVT_NOTIFY_SIGNAL,
                     TPL_NOTIFY,

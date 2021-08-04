@@ -96,14 +96,14 @@ CHAR16 *mMemoryTypeShortName[] = {
 
 CHAR16 mUnknownStr[11];
 
-CHAR16 *
-ShortNameOfMemoryType (
-  IN UINT32 Type
-  )
+CHAR16 *ShortNameOfMemoryType (IN UINT32 Type)
 {
-  if (Type < sizeof(mMemoryTypeShortName) / sizeof(mMemoryTypeShortName[0])) {
+  if (Type < sizeof(mMemoryTypeShortName) / sizeof(mMemoryTypeShortName[0]))
+   {
     return mMemoryTypeShortName[Type];
-  } else {
+  } 
+  else 
+  {
     UnicodeSPrint(mUnknownStr, sizeof(mUnknownStr), L"%08x", Type);
     return mUnknownStr;
   }
@@ -119,10 +119,7 @@ CHAR16 *mResourceTypeShortName[] = {
   L"Reserved I/O",
 };
 
-CHAR16 *
-ShortNameOfResourceType (
-  IN UINT32 Type
-  )
+CHAR16 *ShortNameOfResourceType (IN UINT32 Type)
 {
   if (Type < sizeof(mResourceTypeShortName) / sizeof(mResourceTypeShortName[0])) {
     return mResourceTypeShortName[Type];
@@ -134,8 +131,8 @@ ShortNameOfResourceType (
 
 VOID ToolInfo(VOID)
 {
-  Print(L"Dump HobList Tool V1.2 \nAuthor:ElderChen\n");
-  Print(L"-h Parameter for Tool Usage.\n");
+  Print(L"Dump HobList Tool V1.0\nAuthor:ElderChen\n");
+  Print(L"For Tool Usage: --help Parameter\n");
 }
 
 VOID PrintUsage(VOID)
@@ -334,7 +331,7 @@ DumpHobList
     return EFI_SUCCESS;
   } 
   
-  else if(Argc ==2 && ((StrCmp(Argv[1], L"-h") == 0)))
+  else if(Argc ==2 && ((StrCmp(Argv[1], L"--help") == 0)))
   {
       PrintUsage();
   } 

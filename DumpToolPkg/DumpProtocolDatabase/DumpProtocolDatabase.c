@@ -33,13 +33,13 @@ LIST_ENTRY      *mDxeCoreProtocolDatabase;
 VOID ToolInfo(VOID)
 {
   Print(L"Dump ProtocolDatabase Tool V1.0 \nAuthor:ElderChen\n");
-  Print(L"Tool Usage : --help\n");
+  Print(L"For Tool Usage : --help Parameter\n");
 }
 
 VOID PrintUsage(VOID)
 {
   Print(L"-All      Dump All Protocols from Database\n");
-  Print(L"-Details  Dump PROTOCOL _ENTRY instances including Protocol Database\n");
+  Print(L"-Detail  Dump PROTOCOL _ENTRY instances including Protocol Database\n");
 }
 
 
@@ -148,7 +148,12 @@ DumpProtocolInterfacesOnHandle(
      {
         ProtocolInterface = CR(ListEntry, PROTOCOL_INTERFACE, Link, PROTOCOL_INTERFACE_SIGNATURE);
         Print(L"    PROTOCOL_INTERFACE = 0x%X\n",ProtocolInterface);
-        Print(L"    Signature = 0x%X\n",ProtocolInterface->Signature);
+        Print(L"    Signature - 0x%X - String - %c%c%c%c\n",
+                    ProtocolInterface->Signature,
+                    (char)ProtocolInterface->Signature,
+                    (char)ProtocolInterface->Signature >> 8,
+                    (char)ProtocolInterface->Signature >> 16,
+                    (char)ProtocolInterface->Signature >> 24);
         Print(L"    Link ForwardLink = 0x%X BackLink = 0x%X\n",
                     ProtocolInterface->Link.ForwardLink,
                     ProtocolInterface->Link.BackLink);
@@ -181,7 +186,12 @@ DumpHandleList(
     {
       Handle = CR(ListEntry, IHANDLE, AllHandles, EFI_HANDLE_SIGNATURE);
       Print(L"%-4dHandle - BA = 0x%X\n", Index + 1,Handle);
-      Print(L"    Signature = 0x%X\n",Handle->Signature);
+      Print(L"    Signature = 0x%X - String = %c%c%c%c\n",
+                  Handle->Signature,
+                  (char)Handle->Signature,
+                  (char)Handle->Signature >> 8,
+                  (char)Handle->Signature >> 16,
+                  (char)Handle->Signature >> 24);
       Print(L"    AllHandles ForwardLink = 0x%X BackLink = 0x%X\n",
                   Handle->AllHandles.ForwardLink,
                   Handle->AllHandles.BackLink);
@@ -225,14 +235,14 @@ DumpProtocolDatabase
     PrintUsage();
   }
 
-  else if(Argc == 2 && StrCmp(Argv[1],L"-Details") == 0)
+  else if(Argc == 2 && StrCmp(Argv[1],L"-Detail") == 0)
   {
     GetDxeCoreHandleList((IHANDLE *)ImageHandle);
     GetDxeCoreProtocolDatabase((IHANDLE *)ImageHandle);
     //DumpHandleList();
     ListEntry = mDxeCoreProtocolDatabase;
     Print(L"+--------------------------------------------------------------+\n");
-    Print(L"|          PROTOCOL_ENTRY sizeof(PROTOCOL_ENTRY) = 44          |\n");
+    Print(L"|          PROTOCOL_ENTRY sizeof(PROTOCOL_ENTRY) = %d          |\n",sizeof(PROTOCOL_ENTRY));
     Print(L"+--------------------------------------------------------------+\n\n");
     for(ListEntry = ListEntry->ForwardLink, Index = 0;
         ListEntry != mDxeCoreProtocolDatabase;

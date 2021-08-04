@@ -26,14 +26,14 @@ extern EFI_SHELL_PROTOCOL *mShellProtocol;
 extern EFI_SHELL_PROTOCOL *GetShellProtocol(VOID);
 extern EFI_STATUS GetArg(VOID);
 EFI_LOADED_IMAGE_PROTOCOL  *mDxeCoreLoadedImage;
-LIST_ENTRY      *mDxeCoreHandleList;
-LIST_ENTRY      *mDxeCoreProtocolDatabase;
+LIST_ENTRY                 *mDxeCoreHandleList;
+LIST_ENTRY                 *mDxeCoreProtocolDatabase;
 
 
 VOID ToolInfo(VOID)
 {
   Print(L"Dump ProtocolInterface Tool V1.0 \nAuthor:ElderChen\n");
-  Print(L"--help Parameter for Tool Usage.\n");
+  Print(L"For Tool Usage: --help Parameter\n");
 }
 
 VOID PrintUsage(VOID)
@@ -145,24 +145,24 @@ DumpProtocolInterfacesOnHandle(
   for (ListEntry = ListEntry->ForwardLink;
        ListEntry != &IHandle->Protocols;
        ListEntry = ListEntry->ForwardLink)
-     {
-        ProtocolInterface = CR(ListEntry, PROTOCOL_INTERFACE, Link, PROTOCOL_INTERFACE_SIGNATURE);
-        Print(L"    PROTOCOL_INTERFACE = 0X%X\n",ProtocolInterface);
-        Print(L"    Signature = 0X%X\n",ProtocolInterface->Signature);
-        Print(L"    Link ForwardLink = 0X%X BackLink = 0X%X\n",
-                    ProtocolInterface->Link.ForwardLink,
-                    ProtocolInterface->Link.BackLink);
-        Print(L"    Handle = 0X%X\n",ProtocolInterface->Handle);
-        Print(L"    ByProtocol ForwardLink = 0X%X BackLink = 0X%X\n",
-                    ProtocolInterface->ByProtocol.ForwardLink,
-                    ProtocolInterface->ByProtocol.BackLink);
-        Print(L"    PROTOCOL_ENTRY = 0X%X\n",ProtocolInterface->Protocol);
-        Print(L"    Interface = 0X%X\n",ProtocolInterface->Interface);
-        Print(L"    OpenList ForwardLink = 0X%X BackLink = 0X%X\n",
-                    ProtocolInterface->OpenList.ForwardLink,
-                    ProtocolInterface->OpenList.BackLink);
-        Print(L"    OpenListCount = 0X%X\n\n",ProtocolInterface->OpenListCount);        
-      }
+  {
+    ProtocolInterface = CR(ListEntry, PROTOCOL_INTERFACE, Link, PROTOCOL_INTERFACE_SIGNATURE);
+    Print(L"    PROTOCOL_INTERFACE = 0X%X\n",ProtocolInterface);
+    Print(L"    Signature = 0X%X\n",ProtocolInterface->Signature);
+    Print(L"    Link ForwardLink = 0X%X BackLink = 0X%X\n",
+                ProtocolInterface->Link.ForwardLink,
+                ProtocolInterface->Link.BackLink);
+    Print(L"    Handle = 0X%X\n",ProtocolInterface->Handle);
+    Print(L"    ByProtocol ForwardLink = 0X%X BackLink = 0X%X\n",
+                ProtocolInterface->ByProtocol.ForwardLink,
+                ProtocolInterface->ByProtocol.BackLink);
+    Print(L"    PROTOCOL_ENTRY = 0X%X\n",ProtocolInterface->Protocol);
+    Print(L"    Interface = 0X%X\n",ProtocolInterface->Interface);
+    Print(L"    OpenList ForwardLink = 0X%X BackLink = 0X%X\n",
+                ProtocolInterface->OpenList.ForwardLink,
+                ProtocolInterface->OpenList.BackLink);
+    Print(L"    OpenListCount = 0X%X\n\n",ProtocolInterface->OpenListCount);        
+  }
 }
 
 VOID
@@ -184,7 +184,12 @@ DumpHandleList(
     // Print(L"Protocol Database = 0X%X\n",ListEntry);
     Handle = CR(ListEntry, IHANDLE, AllHandles, EFI_HANDLE_SIGNATURE);
     Print(L"%-4dHandle - BA = 0X%X\n", Index + 1,Handle);
-    Print(L"    Signature = 0X%X\n",Handle->Signature);
+    Print(L"    Signature = 0X%X - String = %c%c%c%c\n",
+                Handle->Signature,
+                (char)Handle->Signature,
+                (char)Handle->Signature >> 8,
+                (char)Handle->Signature >> 16,
+                (char)Handle->Signature >> 24);
     Print(L"    AllHandles ForwardLink = 0X%X BackLink = 0X%X\n",
                 Handle->AllHandles.ForwardLink,
                 Handle->AllHandles.BackLink);
