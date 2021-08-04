@@ -157,9 +157,9 @@ DumpEventTimerList(
     Print(L"    Signature - 0x%X - String - %c%c%c%c\n",
                 Event->Signature,
                 (char)(Event->Signature),
-                (char)(Event->Signature>>8),
-                (char)(Event->Signature>>16),
-                (char)(Event->Signature>>24)
+                (char)(Event->Signature >> 8),
+                (char)(Event->Signature >> 16),
+                (char)(Event->Signature >> 24)
               );
     Print(L"    Type - 0x%X\n", Event->Type);
     Print(L"    SignalCount - %d\n", Event->SignalCount);

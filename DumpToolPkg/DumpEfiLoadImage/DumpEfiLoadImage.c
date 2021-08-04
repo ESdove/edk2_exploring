@@ -76,7 +76,7 @@ DumpEfiLoadImage(
 {
   EFI_STATUS Status;
   UINTN NoHandles;
-  EFI_HANDLE *HandleBuffer;
+  EFI_HANDLE *HandleBuffer = NULL;
   UINTN Index;
   CHAR16 *PathStr;
   EFI_LOADED_IMAGE_PROTOCOL *LoadedImage;
@@ -94,6 +94,7 @@ DumpEfiLoadImage(
   else if (Argc == 2 && ((StrCmp(Argv[1], L"--help") == 0)))
   {
     PrintUsage();
+   
   }
 
   else if (Argc == 2 && ((StrCmp(Argv[1], L"-All") == 0)))
@@ -119,22 +120,26 @@ DumpEfiLoadImage(
       }
       PathStr = ConvertDevicePathToText(LoadedImage->FilePath, TRUE, TRUE);
       Print(L"%-3d IHANDLE BA = 0X%X --- %s\n", Index + 1, HandleBuffer[Index], PathStr);
-      Print(L"     EFI_LOADED_IMAGE_PROTOCOL = 0X%X\n", (UINTN *)LoadedImage);
-      Print(L"     ParentHandle = 0X%X\n", LoadedImage->ParentHandle);
-      Print(L"     DeviceHandle = 0X%X\n", LoadedImage->DeviceHandle);
-      Print(L"     LoadOptionSize = %d --- 0X%X\n", LoadedImage->LoadOptionsSize, LoadedImage->LoadOptionsSize);
-      Print(L"     LoadOptions = 0X%X\n", LoadedImage->LoadOptions);
-      Print(L"     ImageBase = 0X%X\n", LoadedImage->ImageBase);
-      Print(L"     ImageSize = %d --- 0X%X\n", LoadedImage->ImageSize, LoadedImage->ImageSize);
-      Print(L"     ImageCodeType = %s\n", ShortNameOfMemoryType(LoadedImage->ImageCodeType));
-      Print(L"     ImageDataType = %s\n", ShortNameOfMemoryType(LoadedImage->ImageDataType));
-      Print(L"     Unload = 0X%X\n", LoadedImage->Unload);
+      Print(L"      EFI_LOADED_IMAGE_PROTOCOL = 0X%X\n", (UINTN *)LoadedImage);
+      Print(L"      ParentHandle = 0X%X\n", LoadedImage->ParentHandle);
+      Print(L"      DeviceHandle = 0X%X\n", LoadedImage->DeviceHandle);
+      Print(L"      LoadOptionSize = %d --- 0X%X\n", LoadedImage->LoadOptionsSize, LoadedImage->LoadOptionsSize);
+      Print(L"      LoadOptions = 0X%X\n", LoadedImage->LoadOptions);
+      Print(L"      ImageBase = 0X%X\n", LoadedImage->ImageBase);
+      Print(L"      ImageSize = %d --- 0X%X\n", LoadedImage->ImageSize, LoadedImage->ImageSize);
+      Print(L"      ImageCodeType = %s\n", ShortNameOfMemoryType(LoadedImage->ImageCodeType));
+      Print(L"      ImageDataType = %s\n", ShortNameOfMemoryType(LoadedImage->ImageDataType));
+      Print(L"      Unload = 0X%X\n\n", LoadedImage->Unload);
+
     }
   }
   else
   {
     Print(L"Invalid command line option(s)\n");
   }
-
+  
+  if(HandleBuffer != NULL)
+  gBS->FreePool(HandleBuffer);
+  
   return EFI_SUCCESS;
 }

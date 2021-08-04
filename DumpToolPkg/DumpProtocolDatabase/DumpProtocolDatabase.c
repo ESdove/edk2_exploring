@@ -39,7 +39,7 @@ VOID ToolInfo(VOID)
 VOID PrintUsage(VOID)
 {
   Print(L"-All      Dump All Protocols from Database\n");
-  Print(L"-Detail  Dump PROTOCOL _ENTRY instances including Protocol Database\n");
+  Print(L"-Detail  Dump PROTOCOL_ENTRY instances including Protocol Database\n");
 }
 
 
@@ -150,10 +150,10 @@ DumpProtocolInterfacesOnHandle(
         Print(L"    PROTOCOL_INTERFACE = 0x%X\n",ProtocolInterface);
         Print(L"    Signature - 0x%X - String - %c%c%c%c\n",
                     ProtocolInterface->Signature,
-                    (char)ProtocolInterface->Signature,
-                    (char)ProtocolInterface->Signature >> 8,
-                    (char)ProtocolInterface->Signature >> 16,
-                    (char)ProtocolInterface->Signature >> 24);
+                    (char)(ProtocolInterface->Signature),
+                    (char)(ProtocolInterface->Signature >> 8),
+                    (char)(ProtocolInterface->Signature >> 16),
+                    (char)(ProtocolInterface->Signature >> 24));
         Print(L"    Link ForwardLink = 0x%X BackLink = 0x%X\n",
                     ProtocolInterface->Link.ForwardLink,
                     ProtocolInterface->Link.BackLink);
@@ -188,10 +188,10 @@ DumpHandleList(
       Print(L"%-4dHandle - BA = 0x%X\n", Index + 1,Handle);
       Print(L"    Signature = 0x%X - String = %c%c%c%c\n",
                   Handle->Signature,
-                  (char)Handle->Signature,
-                  (char)Handle->Signature >> 8,
-                  (char)Handle->Signature >> 16,
-                  (char)Handle->Signature >> 24);
+                  (char)(Handle->Signature),
+                  (char)(Handle->Signature >> 8),
+                  (char)(Handle->Signature >> 16),
+                  (char)(Handle->Signature >> 24));
       Print(L"    AllHandles ForwardLink = 0x%X BackLink = 0x%X\n",
                   Handle->AllHandles.ForwardLink,
                   Handle->AllHandles.BackLink);

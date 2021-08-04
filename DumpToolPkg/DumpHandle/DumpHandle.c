@@ -51,7 +51,7 @@ LIST_ENTRY *mDxeCoreHandleList;
 VOID ToolInfo(VOID)
 {
   Print(L"Dump Handle Tool V1.1 \nAuthor:ElderChen\n");
-  Print(L"Retrieve the handles where specificed protocol is installed\n");
+  Print(L"Retrieve the handles with specificed protocol is installed\n");
   Print(L"For Tool Usage: --help Parameters\n");
 }
 
@@ -123,10 +123,10 @@ VOID DumpHandleList(VOID)
     Print(L"%-4d Handle - BA = 0X%X\n", Index + 1, Handle);
     Print(L"     Signature - 0X%X - String - %c%c%c%c\n", 
                   Handle->Signature,
-                  (char)Handle->Signature,
-                  (char)Handle->Signature >> 8,
-                  (char)Handle->Signature >> 16,
-                  (char)Handle->Signature >> 24);
+                  (char)(Handle->Signature),
+                  (char)(Handle->Signature >> 8),
+                  (char)(Handle->Signature >> 16),
+                  (char)(Handle->Signature >> 24));
     Print(L"     AllHandles ForwardLink = 0X%X BackLink = 0X%X\n",
           Handle->AllHandles.ForwardLink,
           Handle->AllHandles.BackLink);
@@ -166,7 +166,7 @@ DumpHandle(IN EFI_HANDLE ImageHandle,
   {
     PrintUsage();
   }
-  else if (Argc == 3 && (StrCmp(Argv[2], L"-Detail") == 0))
+  else if (Argc == 2 && (StrCmp(Argv[1], L"-Detail") == 0))
   {
     GetDxeCoreHandleList((IHANDLE *)ImageHandle);
     DumpHandleList();

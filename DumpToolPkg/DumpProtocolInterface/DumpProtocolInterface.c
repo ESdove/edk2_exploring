@@ -186,10 +186,10 @@ DumpHandleList(
     Print(L"%-4dHandle - BA = 0X%X\n", Index + 1,Handle);
     Print(L"    Signature = 0X%X - String = %c%c%c%c\n",
                 Handle->Signature,
-                (char)Handle->Signature,
-                (char)Handle->Signature >> 8,
-                (char)Handle->Signature >> 16,
-                (char)Handle->Signature >> 24);
+                (char)(Handle->Signature),
+                (char)(Handle->Signature >> 8),
+                (char)(Handle->Signature >> 16),
+                (char)(Handle->Signature >> 24));
     Print(L"    AllHandles ForwardLink = 0X%X BackLink = 0X%X\n",
                 Handle->AllHandles.ForwardLink,
                 Handle->AllHandles.BackLink);
