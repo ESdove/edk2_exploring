@@ -134,6 +134,7 @@ INF  EmulatorPkg/ThunkPpiToProtocolPei/ThunkPpiToProtocolPei.inf
 INF  MdeModulePkg/Universal/FaultTolerantWritePei/FaultTolerantWritePei.inf
 INF  MdeModulePkg/Universal/Variable/Pei/VariablePei.inf
 INF  MdeModulePkg/Core/DxeIplPeim/DxeIpl.inf
+INF  DumpToolPkg/PeiCoreDump/PeiCoreDump.inf
 
 #
 #  DXE Phase modules

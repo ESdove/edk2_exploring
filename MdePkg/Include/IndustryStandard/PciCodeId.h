@@ -10,7 +10,8 @@
 #ifndef __PCI_CODE_ID_H__
 #define __PCI_CODE_ID_H__
 
-
+//definel了一堆PciCodeId 目前不知道用来做什么
+//但知道的一点就是与规范有关，有分类
 ///
 /// PCI_CLASS_MASS_STORAGE, Base Class 01h.
 ///
@@ -21,10 +22,10 @@
 #define   PCI_IF_MASS_STORAGE_SCSI_DEVICE_CONTROLLER_PQI    0x13
 #define   PCI_IF_MASS_STORAGE_SCSI_DEVICE_NVM_EXPRESS       0x21
 #define   PCI_IF_MASS_STORAGE_SATA_SERIAL_BUS               0x02
-#define PCI_CLASS_MASS_STORAGE_SAS                        0x07
+#define   PCI_CLASS_MASS_STORAGE_SAS                        0x07
 #define   PCI_IF_MASS_STORAGE_SAS                           0x00
 #define   PCI_IF_MASS_STORAGE_SAS_SERIAL_BUS                0x01
-#define PCI_CLASS_MASS_STORAGE_SOLID_STATE                0x08
+#define   PCI_CLASS_MASS_STORAGE_SOLID_STATE                0x08
 #define   PCI_IF_MASS_STORAGE_SOLID_STATE                   0x00
 #define   PCI_IF_MASS_STORAGE_SOLID_STATE_NVMHCI            0x01
 #define   PCI_IF_MASS_STORAGE_SOLID_STATE_ENTERPRISE_NVMHCI 0x02
@@ -73,7 +74,7 @@
 /// PCI_CLASS_SERIAL, Base Class 0Ch.
 ///
 ///@{
-#define   PCI_IF_XHCI             0x30
+#define PCI_IF_XHCI             0x30
 #define PCI_CLASS_SERIAL_OTHER  0x80
 ///@}
 

@@ -334,11 +334,18 @@
   DumpToolPkg/DumpHandle/DumpHandle.inf
   DumpToolPkg/DumpHobList/DumpHobList.inf
   DumpToolPkg/ApiTest/ApiTest.inf
-  DumpToolPkg/AdlGpio/AdlGpio.inf
+  DumpToolPkg/AdlSGpio/AdlSGpio.inf
   DumpToolPkg/DumpEfiLoadImage/DumpEfiLoadImage.inf
   DumpToolPkg/DumpProtocolInterface/DumpProtocolInterface.inf
   DumpToolPkg/DumpProtocolDatabase/DumpProtocolDatabase.inf
   DumpToolPkg/DumpEvent/DumpEvent.inf
+  DumpToolPkg/DummyRt/DummyRt.inf
+  # DumpToolPkg/StackUsage/StackUsage.inf
+  DumpToolPkg/UsbInfo/UsbInfo.inf
+  DumpToolPkg/BootOption/BootOption.inf
+  DumpToolPkg/GetPciOprom/GetPciOprom.inf
+  DumpToolPkg/PeiCoreDump/PeiCoreDump.inf
+  DumpToolPkg/PeiCoreDump/PeiCoreDumpApp.inf
   DumpToolPkg/DxeDriverTest/DxeDriverTest.inf {
     <LibraryClasses>
       DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf

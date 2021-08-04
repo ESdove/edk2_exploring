@@ -16,6 +16,7 @@
 #ifndef _PCI22_H_
 #define _PCI22_H_
 
+//从0开始计数 最大需占用空间地址为256*32*8*4 KB = 256MB
 #define PCI_MAX_BUS     255
 #define PCI_MAX_DEVICE  31
 #define PCI_MAX_FUNC    7
@@ -26,16 +27,17 @@
 /// Common header region in PCI Configuration Space
 /// Section 6.1, PCI Local Bus Specification, 2.2
 ///
+//每个PCIE设备的前十六个字节是独立固定的
 typedef struct {
-  UINT16  VendorId;
-  UINT16  DeviceId;
-  UINT16  Command;
+  UINT16  VendorId; //厂商Id
+  UINT16  DeviceId; //设备Id
+  UINT16  Command;  
   UINT16  Status;
-  UINT8   RevisionID;
-  UINT8   ClassCode[3];
-  UINT8   CacheLineSize;
+  UINT8   RevisionID;//版本Id
+  UINT8   ClassCode[3];//三个字节的ClasCode
+  UINT8   CacheLineSize;//
   UINT8   LatencyTimer;
-  UINT8   HeaderType;
+  UINT8   HeaderType;//Header的类型
   UINT8   BIST;
 } PCI_DEVICE_INDEPENDENT_REGION;
 
@@ -43,6 +45,8 @@ typedef struct {
 /// PCI Device header region in PCI Configuration Space
 /// Section 6.1, PCI Local Bus Specification, 2.2
 ///
+
+// Header Type Region 定义出来表示什么 暂时未知
 typedef struct {
   UINT32  Bar[6];
   UINT32  CISPtr;
@@ -62,6 +66,7 @@ typedef struct {
 /// PCI Device Configuration Space
 /// Section 6.1, PCI Local Bus Specification, 2.2
 ///
+//封装Independent和Haeder_Type 作为PCI_TYPE00类
 typedef struct {
   PCI_DEVICE_INDEPENDENT_REGION Hdr;
   PCI_DEVICE_HEADER_TYPE_REGION Device;
@@ -71,14 +76,15 @@ typedef struct {
 /// PCI-PCI Bridge header region in PCI Configuration Space
 /// Section 3.2, PCI-PCI Bridge Architecture, Version 1.2
 ///
+//pci桥控制寄存器，这个类应该非常重要
 typedef struct {
   UINT32  Bar[2];
-  UINT8   PrimaryBus;
+  UINT8   PrimaryBus;//这三个BUS应该是描述与此有关的bus树的一个结构
   UINT8   SecondaryBus;
   UINT8   SubordinateBus;
   UINT8   SecondaryLatencyTimer;
-  UINT8   IoBase;
-  UINT8   IoLimit;
+  UINT8   IoBase; //Io基地址
+  UINT8   IoLimit;//Io的限制 目前不确定拿来怎么用
   UINT16  SecondaryStatus;
   UINT16  MemoryBase;
   UINT16  MemoryLimit;
@@ -90,21 +96,25 @@ typedef struct {
   UINT16  IoLimitUpper16;
   UINT8   CapabilityPtr;
   UINT8   Reserved[3];
-  UINT32  ExpansionRomBAR;
+  UINT32  ExpansionRomBAR;//猜测可能存储的是扩展的OptionRom地址
   UINT8   InterruptLine;
   UINT8   InterruptPin;
-  UINT16  BridgeControl;
+  UINT16  BridgeControl;//桥控制器
 } PCI_BRIDGE_CONTROL_REGISTER;
 
 ///
 /// PCI-to-PCI Bridge Configuration Space
 /// Section 3.2, PCI-PCI Bridge Architecture, Version 1.2
 ///
+
+//独立的描述PCI的类和桥控制寄存器类组合成PCI_TYPE01
 typedef struct {
   PCI_DEVICE_INDEPENDENT_REGION Hdr;
   PCI_BRIDGE_CONTROL_REGISTER   Bridge;
 } PCI_TYPE01;
 
+
+//要么是pci设备，要么是pci桥，定义一个联合体来表示二选一
 typedef union {
   PCI_TYPE00  Device;
   PCI_TYPE01  Bridge;
@@ -114,11 +124,12 @@ typedef union {
 /// CardBus Controller Configuration Space,
 /// Section 4.5.1, PC Card Standard. 8.0
 ///
+
+//PCI_CardBus的控制寄存器描述
 typedef struct {
   UINT32  CardBusSocketReg;     ///< Cardbus Socket/ExCA Base
   UINT8   Cap_Ptr;
   UINT8   Reserved;
-  UINT16  SecondaryStatus;      ///< Secondary Status
   UINT8   PciBusNumber;         ///< PCI Bus Number
   UINT8   CardBusBusNumber;     ///< CardBus Bus Number
   UINT8   SubordinateBusNumber; ///< Subordinate Bus Number

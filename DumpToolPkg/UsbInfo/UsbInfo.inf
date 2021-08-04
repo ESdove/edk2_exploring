@@ -1,0 +1,30 @@
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = UsbInfo
+  FILE_GUID                      = 03C5A8B3-D02D-4f22-9634-C527515AA6C6
+  MODULE_TYPE                    = UEFI_APPLICATION
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = UsbInfoEntryPoint
+
+[sources]
+  UsbInfo.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+
+[LibraryClasses]
+  UefiApplicationEntryPoint
+  BaseLib
+  BaseMemoryLib
+  MemoryAllocationLib
+  DebugLib
+  UefiLib
+  UefiBootServicesTableLib
+  DxeServicesTableLib
+  PrintLib
+  DevicePathLib
+
+[Protocols]
+  gEfiUsbIoProtocolGuid
+  gEfiUsb2HcProtocolGuid
+  gEfiPciIoProtocolGuid

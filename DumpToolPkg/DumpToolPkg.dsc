@@ -79,7 +79,7 @@
   gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|0x1
 
 [Components]
-  DumpToolPkg/AdlGpio/AdlGpio.inf
+  DumpToolPkg/AdlSGpio/AdlSGpio.inf
   DumpToolPkg/ApiTest/ApiTest.inf
   DumpToolPkg/DumpHobList/DumpHobList.inf
   DumpToolPkg/DumpHandle/DumpHandle.inf
@@ -87,6 +87,12 @@
   DumpToolPkg/DumpProtocolInterface/DumpProtocolInterface.inf
   DumpToolPkg/DumpProtocolDatabase/DumpProtocolDatabase.inf
   DumpToolPkg/DumpEvent/DumpEvent.inf
+  DumpToolPkg/DummyRt/DummyRt.inf
+  DumpToolPkg/StackUsage/StackUsage.inf
+  DumpToolPkg/UsbInfo/UsbInfo.inf
+  DumpToolPkg/BootOption/BootOption.inf
+  DumpToolPkg/PeiCoreDump/PeiCoreDump.inf
+  DumpToolPkg/PeiCoreDump/PeiCoreDumpApp.inf
 
 [BuildOptions]
   MSVC:DEBUG_*_*_DLINK_FLAGS = /EXPORT:InitializeDriver=$(IMAGE_ENTRY_POINT) /BASE:0x10000 /ALIGN:4096 /FILEALIGN:4096 /SUBSYSTEM:CONSOLE
