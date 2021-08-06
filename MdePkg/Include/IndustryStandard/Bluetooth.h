@@ -15,6 +15,8 @@
 ///
 /// BLUETOOTH_ADDRESS
 ///
+//六个字节数据表示蓝牙设备地址
+//类比MAC地址，也是六个字节
 typedef struct {
   ///
   /// 48bit Bluetooth device address.
@@ -25,6 +27,7 @@ typedef struct {
 ///
 /// BLUETOOTH_CLASS_OF_DEVICE. See Bluetooth specification for detail.
 ///
+// 四个字节表示蓝牙设备的Class，目前理解还不确切，需要看对应的spec
 typedef struct {
   UINT8      FormatType:2;
   UINT8      MinorDeviceClass: 6;
@@ -35,6 +38,7 @@ typedef struct {
 ///
 /// BLUETOOTH_LE_ADDRESS
 ///
+// LE Address , 加了个Type属性
 typedef struct {
   ///
   /// 48-bit Bluetooth device address

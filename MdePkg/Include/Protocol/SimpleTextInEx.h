@@ -298,6 +298,7 @@ EFI_STATUS
 /// which allows a variety of extended shift state information to be
 /// returned.
 ///
+//该Protocol是为了扩展EFI_SIMPLE_TEXT_INPUT_PROTOCOL
 struct _EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL{
   EFI_INPUT_RESET_EX              Reset;
   EFI_INPUT_READ_KEY_EX           ReadKeyStrokeEx;

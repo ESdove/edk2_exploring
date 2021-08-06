@@ -159,7 +159,8 @@ typedef struct {
   ///
   /// The size, in bytes, of the entire table including the EFI_TABLE_HEADER.
   ///
-  UINT32  HeaderSize;
+  UINT32  HeaderSize; //指的是整个gPS的size，不单单是HeaderSize
+
   ///
   /// The 32-bit CRC for the entire table. This value is computed by
   /// setting this field to 0, and computing the 32-bit CRC for HeaderSize bytes.

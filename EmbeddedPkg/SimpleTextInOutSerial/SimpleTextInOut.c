@@ -612,6 +612,7 @@ QueryMode (
   OUT UINTN                          *Rows
   )
 {
+  // Text Mode 参数判断 MaxMode 
   if (This->Mode->MaxMode > 1) {
     return EFI_DEVICE_ERROR;
   }

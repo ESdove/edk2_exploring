@@ -5,10 +5,13 @@
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
+//这支文件是用来找到PeiCore的入口点
 
 #include <PiPei.h>
 
 #include "SecMain.h"
+
+//查找的话，需要传入固件卷和文件类型，返回一个输出类型的指针表示寻找到的地址
 
 /**
   Find core image base.
@@ -21,7 +24,7 @@
 EFI_STATUS
 EFIAPI
 FindImageBase (
-  IN  EFI_FIRMWARE_VOLUME_HEADER       *FirmwareVolumePtr,
+  IN  EFI_FIRMWARE_VOLUME_HEADER       *FirmwareVolumePtr,//指向固件卷的首地址
   IN  EFI_FV_FILETYPE                  FileType,
   OUT EFI_PHYSICAL_ADDRESS             *CoreImageBase
   )
@@ -34,18 +37,20 @@ FindImageBase (
   EFI_COMMON_SECTION_HEADER   *Section;
   EFI_PHYSICAL_ADDRESS        EndOfSection;
 
-  *CoreImageBase = 0;
+  *CoreImageBase = 0;//先初始化为0
 
+  //两个中间变量分别存储固件卷的头尾信息，定位固件卷
   CurrentAddress = (EFI_PHYSICAL_ADDRESS)(UINTN) FirmwareVolumePtr;
   EndOfFirmwareVolume = CurrentAddress + FirmwareVolumePtr->FvLength;
 
   //
   // Loop through the FFS files in the Boot Firmware Volume
-  //
+  // 遍历一遍固件卷
   for (EndOfFile = CurrentAddress + FirmwareVolumePtr->HeaderLength; ; ) {
 
     CurrentAddress = (EndOfFile + 7) & 0xfffffffffffffff8ULL;
-    if (CurrentAddress > EndOfFirmwareVolume) {
+    //找到结尾都没找到，返回EFI_NOT_FOUND
+    if (CurrentAddress > EndOfFirmEFI_NOT_FOUNDEFI_NOT_FOUND
       return EFI_NOT_FOUND;
     }
 
@@ -103,7 +108,7 @@ FindImageBase (
         return EFI_NOT_FOUND;
       }
 
-      //
+      // 通过Type限定寻找可执行sections
       // Look for executable sections
       //
       if (Section->Type == EFI_SECTION_PE32 || Section->Type == EFI_SECTION_TE) {

@@ -16,6 +16,7 @@
 #ifndef _PCI22_H_
 #define _PCI22_H_
 
+//每个PCI配置空间大小为4KB 256*32*8*4 KB = 256MB
 #define PCI_MAX_BUS     255
 #define PCI_MAX_DEVICE  31
 #define PCI_MAX_FUNC    7
@@ -26,6 +27,7 @@
 /// Common header region in PCI Configuration Space
 /// Section 6.1, PCI Local Bus Specification, 2.2
 ///
+//描述PCI配置空间的公有部分
 typedef struct {
   UINT16  VendorId;
   UINT16  DeviceId;
@@ -43,6 +45,7 @@ typedef struct {
 /// PCI Device header region in PCI Configuration Space
 /// Section 6.1, PCI Local Bus Specification, 2.2
 ///
+//描述PCI设备的Header结构
 typedef struct {
   UINT32  Bar[6];
   UINT32  CISPtr;
@@ -62,6 +65,8 @@ typedef struct {
 /// PCI Device Configuration Space
 /// Section 6.1, PCI Local Bus Specification, 2.2
 ///
+
+//PCI配置空间公有部分 + PCI设备的Header描述一个PCI Device的配置空间
 typedef struct {
   PCI_DEVICE_INDEPENDENT_REGION Hdr;
   PCI_DEVICE_HEADER_TYPE_REGION Device;
@@ -71,6 +76,7 @@ typedef struct {
 /// PCI-PCI Bridge header region in PCI Configuration Space
 /// Section 3.2, PCI-PCI Bridge Architecture, Version 1.2
 ///
+//不同于PCI_DEVICE,PCI-PCI Bridge也需要定义具体的数据类型来描述
 typedef struct {
   UINT32  Bar[2];
   UINT8   PrimaryBus;
@@ -100,11 +106,14 @@ typedef struct {
 /// PCI-to-PCI Bridge Configuration Space
 /// Section 3.2, PCI-PCI Bridge Architecture, Version 1.2
 ///
+
+//PCI配置空间公有部分 + PCI-PCI Bridge 组合成PCI_TYPE01,用来表征PCI-PCI Bridge
 typedef struct {
   PCI_DEVICE_INDEPENDENT_REGION Hdr;
   PCI_BRIDGE_CONTROL_REGISTER   Bridge;
 } PCI_TYPE01;
 
+//PCI_TYPE_GENERIC union用来表示非PCI设备即是PCI-PCI Bridge这种状态
 typedef union {
   PCI_TYPE00  Device;
   PCI_TYPE01  Bridge;
@@ -114,6 +123,7 @@ typedef union {
 /// CardBus Controller Configuration Space,
 /// Section 4.5.1, PC Card Standard. 8.0
 ///
+//定义一个类来描述PCI CardBus
 typedef struct {
   UINT32  CardBusSocketReg;     ///< Cardbus Socket/ExCA Base
   UINT8   Cap_Ptr;
@@ -138,7 +148,7 @@ typedef struct {
 
 //
 // Definitions of PCI class bytes and manipulation macros.
-//
+// PCI类字节和操作宏的定义
 #define PCI_CLASS_OLD                 0x00
 #define   PCI_CLASS_OLD_OTHER           0x00
 #define   PCI_CLASS_OLD_VGA             0x01

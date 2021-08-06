@@ -385,7 +385,11 @@ VOID
 /// EFI_PEI_CPU_IO_PPI provides a set of memory and I/O-based services.
 /// The perspective of the services is that of the processor, not that of the
 /// bus or system.
-///
+/// EFI_PEI_CPU_IO_PPI 提供了一组基于内存和I/O的服务，服务的视角是处理器的角度，
+/// 而不是系统和总线的角度
+
+/// 总体来说，先要能有对Io和Mem的权限
+/// 然后对8、16、32、64位的数据宽度提供读写接口
 struct _EFI_PEI_CPU_IO_PPI {
   ///
   /// Collection of memory-access services.

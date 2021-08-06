@@ -48,13 +48,14 @@ typedef union {
 ///
 #define FFS_FIXED_CHECKSUM  0xAA
 
+//FFS的三个要素 文件类型 属性和状态
 typedef UINT8 EFI_FV_FILETYPE;
 typedef UINT8 EFI_FFS_FILE_ATTRIBUTES;
 typedef UINT8 EFI_FFS_FILE_STATE;
 
 ///
 /// File Types Definitions
-///
+///定义出了23种文件类型
 #define EFI_FV_FILETYPE_ALL                   0x00
 #define EFI_FV_FILETYPE_RAW                   0x01
 #define EFI_FV_FILETYPE_FREEFORM              0x02
@@ -83,7 +84,7 @@ typedef UINT8 EFI_FFS_FILE_STATE;
 #define EFI_FV_FILETYPE_FFS_PAD               0xf0
 ///
 /// FFS File Attributes.
-///
+/// 定义出了五种属性出来
 #define FFS_ATTRIB_LARGE_FILE         0x01
 #define FFS_ATTRIB_DATA_ALIGNMENT_2   0x02
 #define FFS_ATTRIB_FIXED              0x04
@@ -92,7 +93,7 @@ typedef UINT8 EFI_FFS_FILE_STATE;
 
 ///
 /// FFS File State Bits.
-///
+/// 定义出6种State
 #define EFI_FILE_HEADER_CONSTRUCTION  0x01
 #define EFI_FILE_HEADER_VALID         0x02
 #define EFI_FILE_DATA_VALID           0x04
@@ -109,28 +110,31 @@ typedef struct {
   ///
   /// This GUID is the file name. It is used to uniquely identify the file.
   ///
-  EFI_GUID                Name;
+  EFI_GUID                Name;//FFS文件GUID
   ///
   /// Used to verify the integrity of the file.
   ///
-  EFI_FFS_INTEGRITY_CHECK IntegrityCheck;
+  EFI_FFS_INTEGRITY_CHECK IntegrityCheck;//用于验证文件的完整性
   ///
   /// Identifies the type of file.
   ///
-  EFI_FV_FILETYPE         Type;
+  EFI_FV_FILETYPE         Type;//文件类型
   ///
   /// Declares various file attribute bits.
   ///
-  EFI_FFS_FILE_ATTRIBUTES Attributes;
+  EFI_FFS_FILE_ATTRIBUTES Attributes;//文件属性
   ///
   /// The length of the file in bytes, including the FFS header.
   ///
-  UINT8                   Size[3];
+  UINT8                   Size[3];//文件的size，包括FFS字节头
+
   ///
   /// Used to track the state of the file throughout the life of the file from creation to deletion.
   ///
-  EFI_FFS_FILE_STATE      State;
+  EFI_FFS_FILE_STATE      State;//用于在文件创建到删除的整个生命周期追踪文件的状态
 } EFI_FFS_FILE_HEADER;
+
+//sizeof(EFI_FFS_FILE_HEADER) = 24,即一个文件的FFS Header用24个字节来表示
 
 typedef struct {
   ///
@@ -162,7 +166,7 @@ typedef struct {
   /// Size is not required to be a multiple of 8 bytes. Given a file F, the next file header is
   /// located at the next 8-byte aligned firmware volume offset following the last byte of the file F.
   ///
-  UINT8                     Size[3];
+  UINT8                     Size[3];//length = size - sizeof(EFI_FFS_FILE_HEADER)
 
   ///
   /// Used to track the state of the file throughout the life of the file from creation to deletion.

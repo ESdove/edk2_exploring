@@ -9,7 +9,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include "PeiMain.h"
 
 EFI_PEI_PPI_DESCRIPTOR mMemoryDiscoveredPpi = {
-  (EFI_PEI_PPI_DESCRIPTOR_PPI | EFI_PEI_PPI_DESCRIPTOR_TERMINATE_LIST),
+  (EFI_PEI_PPI_DESCRIPTOR_PPI | EFI_PEI_PPI_DESCRIPTOR_TERMINATE_LIST),//0x80000010
   &gEfiPeiMemoryDiscoveredPpiGuid,
   NULL
 };
@@ -22,7 +22,7 @@ EFI_PEI_SERVICES  gPs = {
     PEI_SERVICES_SIGNATURE,
     PEI_SERVICES_REVISION,
     sizeof (EFI_PEI_SERVICES),
-    0,
+    0, //CRC先置成0
     0
   },
   PeiInstallPpi,

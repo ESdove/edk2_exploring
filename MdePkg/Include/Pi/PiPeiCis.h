@@ -78,7 +78,7 @@ EFI_STATUS
 
 //
 // PEI Ppi Services List Descriptors
-//
+//定义一组宏用来组合描述EFI_PEI_PPI_DESCRIPTOR的Flags成员
 #define EFI_PEI_PPI_DESCRIPTOR_PIC              0x00000001
 #define EFI_PEI_PPI_DESCRIPTOR_PPI              0x00000010
 #define EFI_PEI_PPI_DESCRIPTOR_NOTIFY_CALLBACK  0x00000020
@@ -89,6 +89,7 @@ EFI_STATUS
 ///
 /// The data structure through which a PEIM describes available services to the PEI Foundation.
 ///
+//PPI是中央数据库，描述这个PPI需要Flags Guid和指向PPI的指针
 typedef struct {
   ///
   /// This field is a set of flags describing the characteristics of this imported table entry.
@@ -877,6 +878,7 @@ EFI_STATUS
 /// - Abstracting the PPI database abstraction
 /// - Creating Hand-Off Blocks (HOBs).
 ///
+// EFI_PEI_SERVCIE由Header加一堆函数指针组成
 struct _EFI_PEI_SERVICES {
   ///
   /// The table header for the PEI Services Table.
@@ -885,25 +887,25 @@ struct _EFI_PEI_SERVICES {
 
   //
   // PPI Functions
-  //
+  // 关于ppi数据库的有四种Install ReInstall Locate Notify 
   EFI_PEI_INSTALL_PPI             InstallPpi;
   EFI_PEI_REINSTALL_PPI           ReInstallPpi;
   EFI_PEI_LOCATE_PPI              LocatePpi;
   EFI_PEI_NOTIFY_PPI              NotifyPpi;
 
-  //
+  // BootMode无非就是Get和Set两种
   // Boot Mode Functions
   //
   EFI_PEI_GET_BOOT_MODE           GetBootMode;
   EFI_PEI_SET_BOOT_MODE           SetBootMode;
 
-  //
+  //HOB的话一个是拿到Hoblist头指针，一个是创建Hob,可以创建后再填值
   // HOB Functions
   //
   EFI_PEI_GET_HOB_LIST            GetHobList;
   EFI_PEI_CREATE_HOB              CreateHob;
 
-  //
+  // 固件卷有三个接口 一个是找下一个固件卷 一个是找下一个文件 还有一个是找SectionData
   // Firmware Volume Functions
   //
   EFI_PEI_FFS_FIND_NEXT_VOLUME2   FfsFindNextVolume;
@@ -912,7 +914,8 @@ struct _EFI_PEI_SERVICES {
 
   //
   // PEI Memory Functions
-  //
+  // PEI阶段Memory的话 InstallPeiMemory很重要 AllocatePages和AllocatePool拿来在堆区分配内存
+  // CopyMem 和 SetMem 是用来为内存填值的，一个是拷贝，一个是直接赋值
   EFI_PEI_INSTALL_PEI_MEMORY      InstallPeiMemory;
   EFI_PEI_ALLOCATE_PAGES          AllocatePages;
   EFI_PEI_ALLOCATE_POOL           AllocatePool;
@@ -921,10 +924,10 @@ struct _EFI_PEI_SERVICES {
 
   //
   // Status Code
-  //
+  // 报告状态码的接口
   EFI_PEI_REPORT_STATUS_CODE      ReportStatusCode;
 
-  //
+  // Reset的动作
   // Reset
   //
   EFI_PEI_RESET_SYSTEM            ResetSystem;
@@ -932,21 +935,21 @@ struct _EFI_PEI_SERVICES {
   //
   // (the following interfaces are installed by publishing PEIM)
   // I/O Abstractions
-  //
+  // CpuIo和PciCfg两组比较重要接口
   EFI_PEI_CPU_IO_PPI              *CpuIo;
   EFI_PEI_PCI_CFG2_PPI            *PciCfg;
 
   //
   // Future Installed Services
-  //
+  // 
   EFI_PEI_FFS_FIND_BY_NAME        FfsFindFileByName;
   EFI_PEI_FFS_GET_FILE_INFO       FfsGetFileInfo;
   EFI_PEI_FFS_GET_VOLUME_INFO     FfsGetVolumeInfo;
-  EFI_PEI_REGISTER_FOR_SHADOW     RegisterForShadow;
+  EFI_PEI_REGISTER_FOR_SHADOW     RegisterForShadow;//注册Shadow
   EFI_PEI_FFS_FIND_SECTION_DATA3  FindSectionData3;
   EFI_PEI_FFS_GET_FILE_INFO2      FfsGetFileInfo2;
-  EFI_PEI_RESET2_SYSTEM           ResetSystem2;
-  EFI_PEI_FREE_PAGES              FreePages;
+  EFI_PEI_RESET2_SYSTEM           ResetSystem2; //ResetSystem2，不过和之前的肯定与区别
+  EFI_PEI_FREE_PAGES              FreePages;//释放AllocatePages方式申请的堆区内存
 };
 
 

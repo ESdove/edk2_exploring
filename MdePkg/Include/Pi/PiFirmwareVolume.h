@@ -109,7 +109,7 @@ typedef struct {
   ///
   /// Length in bytes of the complete firmware volume, including the header.
   ///
-  UINT64                    FvLength;
+  UINT64                    FvLength; //完整固件卷长度，包括Header
   ///
   /// Set to EFI_FVH_SIGNATURE
   ///

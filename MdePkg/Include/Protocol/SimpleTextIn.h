@@ -40,10 +40,10 @@ typedef struct {
 //
 // Required unicode control chars
 //
-#define CHAR_BACKSPACE        0x0008
+#define CHAR_BACKSPACE        0x0008 
 #define CHAR_TAB              0x0009
-#define CHAR_LINEFEED         0x000A
-#define CHAR_CARRIAGE_RETURN  0x000D
+#define CHAR_LINEFEED         0x000A //无对应按键,LF换行键,非显示字符
+#define CHAR_CARRIAGE_RETURN  0x000D //对应回车键
 
 //
 // EFI Scan codes
@@ -53,7 +53,7 @@ typedef struct {
 #define SCAN_DOWN       0x0002
 #define SCAN_RIGHT      0x0003
 #define SCAN_LEFT       0x0004
-#define SCAN_HOME       0x0005
+#define SCAN_HOME       0x0005 //SHIFT+小键盘7
 #define SCAN_END        0x0006
 #define SCAN_INSERT     0x0007
 #define SCAN_DELETE     0x0008
