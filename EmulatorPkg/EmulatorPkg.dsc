@@ -347,6 +347,7 @@
   DumpToolPkg/PeiCoreDump/PeiCoreDump.inf
   DumpToolPkg/PeiCoreDump/PeiCoreDumpApp.inf
   DumpToolPkg/SimpleTextIn/SimpleTextIn.inf
+  DumpToolPkg/Mode/Mode.inf
   DumpToolPkg/DxeDriverTest/DxeDriverTest.inf {
     <LibraryClasses>
       DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
