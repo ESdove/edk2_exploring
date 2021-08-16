@@ -20,7 +20,7 @@ extern EFI_STATUS GetArg(VOID);
 VOID ToolInfo(VOID)
 {
   Print(L"ApiTest\nAuthor:ElderChen.\n");
-  Print(L"--help Parameter for Tool Usage.\n");
+  Print(L"For Tool Usage : --help Parameter.\n");
 }
 
 VOID PrintUsage(VOID)
