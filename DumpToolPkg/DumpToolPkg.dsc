@@ -93,6 +93,7 @@
   DumpToolPkg/BootOption/BootOption.inf
   DumpToolPkg/PeiCoreDump/PeiCoreDump.inf
   DumpToolPkg/PeiCoreDump/PeiCoreDumpApp.inf
+  DumpToolPkg/SimpleTextIn/SimpleTextIn.inf
 
 [BuildOptions]
   MSVC:DEBUG_*_*_DLINK_FLAGS = /EXPORT:InitializeDriver=$(IMAGE_ENTRY_POINT) /BASE:0x10000 /ALIGN:4096 /FILEALIGN:4096 /SUBSYSTEM:CONSOLE
