@@ -81,7 +81,6 @@
   gEfiDevicePathProtocolGuid
 
   gEfiStorageSecurityCommandProtocolGuid
-  gEfiRestExServiceBindingProtocolGuid
   gEfiUnicodeCollation2ProtocolGuid
 
 [Guids]

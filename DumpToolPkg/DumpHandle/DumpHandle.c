@@ -38,7 +38,6 @@
 #include <Protocol/DiskInfo.h>
 #include <Protocol/DevicePath.h>
 #include <Protocol/StorageSecurityCommand.h>
-#include <Protocol/RestEx.h>
 #include <Protocol/UnicodeCollation.h>
 
 extern UINTN Argc;
@@ -79,7 +78,6 @@ VOID PrintUsage(VOID)
   Print(L"-DiskInfo        gEfiDiskInfoProtocolGuid\n");
   Print(L"-DevicePath      gEfiDevicePathProtocolGuid\n");
   Print(L"-StroageSec      gEfiStorageSecurityCommandProtocolGuid\n");
-  Print(L"-ResetEx         gEfiRestExServiceBindingProtocolGuid\n");
   Print(L"-Unicode         gEfiUnicodeCollation2ProtocolGuid\n");
 }
 
@@ -538,21 +536,7 @@ DumpHandle(IN EFI_HANDLE ImageHandle,
     }
     gBS->FreePool(HandleBuffer);
   }
-  else if (Argc == 2 && ((StrCmp(Argv[1], L"-ResetEx") == 0)))
-  {
-    Status = gBS->LocateHandleBuffer( ByProtocol,
-                                      &gEfiRestExServiceBindingProtocolGuid,
-                                      NULL,
-                                      &NoHandles,
-                                      &HandleBuffer);
-
-    Print(L"NoHandles = %d\n", NoHandles);
-    for (Index = 0; Index < NoHandles; Index++)
-    {
-      Print(L"%-4d IHANDLE - BA = 0X%X\n", Index + 1, HandleBuffer[Index]);
-    }
-    gBS->FreePool(HandleBuffer);
-  }
+  
   else if (Argc == 2 && ((StrCmp(Argv[1], L"-Unicode") == 0)))
   {
     Status = gBS->LocateHandleBuffer( ByProtocol,

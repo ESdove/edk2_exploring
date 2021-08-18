@@ -1,7 +1,7 @@
 [Defines]
   INF_VERSION                    = 0x00010005
   BASE_NAME                      = DumpEfiLoadImage
-  FILE_GUID                      = 66B6975B-3A6C-48A7-939B-D093A6901050
+  FILE_GUID                      = 7559DC3B-418A-428E-9480-8B18C073CD95
   MODULE_TYPE                    = UEFI_APPLICATION
   VERSION_STRING                 = 1.0
   ENTRY_POINT                    = DumpEfiLoadImage

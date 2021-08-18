@@ -1,7 +1,7 @@
 [Defines]
   INF_VERSION                    = 0x00010005
   BASE_NAME                      = DumpProtocolInterface
-  FILE_GUID                      = 66B6975B-3A6C-48A7-939B-D093A6901050
+  FILE_GUID                      = 8069971C-9873-4AF3-BE5F-34D250A1FA6C
   MODULE_TYPE                    = UEFI_APPLICATION
   VERSION_STRING                 = 1.0
   ENTRY_POINT                    = DumpProtocolInterface

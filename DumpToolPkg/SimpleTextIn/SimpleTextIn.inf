@@ -1,7 +1,7 @@
 [Defines]
   INF_VERSION                    = 0x00010005
   BASE_NAME                      = SimpleTextIn
-  FILE_GUID                      = E719C0FF-9D12-4C43-97C8-40CC7CBB38B6
+  FILE_GUID                      = 499D74EA-8CBF-4F76-98AA-568197EFF757
   MODULE_TYPE                    = UEFI_APPLICATION
   VERSION_STRING                 = 1.0
   ENTRY_POINT                    = SimpleTextIn
