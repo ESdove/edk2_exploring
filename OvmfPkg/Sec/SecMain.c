@@ -830,7 +830,9 @@ SevEsIsEnabled (
 
   return ((SevEsWorkArea != NULL) && (SevEsWorkArea->SevEsEnabled != 0));
 }
-
+//SecCoreStartupWithStack
+//初始化 IDT ，初始化 SEC PEI 交接的状态信息，以及初始化 debug
+//agent 用作 SEC/PEI 阶段的源代码调试
 VOID
 EFIAPI
 SecCoreStartupWithStack (
@@ -1024,7 +1026,9 @@ SecStartupPhase2(
   ASSERT (FALSE);
   CpuDeadLoop ();
 }
-
+//TemporaryRamMigration
+//函数把 c code 执行所需的栈和堆从临时 memory cache切换
+//到常规内存(主memory)
 EFI_STATUS
 EFIAPI
 TemporaryRamMigration (

@@ -143,6 +143,9 @@ FindImageBase (
   @param   PeiCoreEntryPoint        The entry point of the PEI core.
 
 **/
+//FindAndReportEntryPoints
+//函数在 flash 中寻找 PEI Core 并返回其入口地址，同时也会寻
+//找 SEC 和 PEI Core 的相关调试信息，如果远程调试打开就会显示些相关调试信息
 VOID
 EFIAPI
 FindAndReportEntryPoints (
@@ -158,7 +161,7 @@ FindAndReportEntryPoints (
 
   //
   // Find SEC Core image base
-  //
+  //在Flash中寻找SEC Core
   Status = FindImageBase (SecCoreFirmwareVolumePtr, EFI_FV_FILETYPE_SECURITY_CORE, &SecCoreImageBase);
   ASSERT_EFI_ERROR (Status);
 
@@ -172,20 +175,20 @@ FindAndReportEntryPoints (
 
   //
   // Find PEI Core image base
-  //
+  //在Flash中寻找PEI Core 
   Status = FindImageBase (PeiCoreFirmwareVolumePtr, EFI_FV_FILETYPE_PEI_CORE, &PeiCoreImageBase);
   ASSERT_EFI_ERROR (Status);
 
   //
   // Report PEI Core debug information when remote debug is enabled
-  //
+  //如果远程调试打开就会显示些相关调试信息
   ImageContext.ImageAddress = PeiCoreImageBase;
   ImageContext.PdbPointer = PeCoffLoaderGetPdbPointer ((VOID*) (UINTN) ImageContext.ImageAddress);
   PeCoffLoaderRelocateImageExtraAction (&ImageContext);
 
   //
   // Find PEI Core entry point
-  //
+  //在已经找到的PEI Core中寻找执行的入口地址。
   Status = PeCoffLoaderGetEntryPoint ((VOID *) (UINTN) PeiCoreImageBase, (VOID**) PeiCoreEntryPoint);
   if (EFI_ERROR (Status)) {
     *PeiCoreEntryPoint = 0;

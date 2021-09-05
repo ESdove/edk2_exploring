@@ -143,6 +143,9 @@ SecPerformancePpiCallBack (
   @param TempRamBase         Base address of temporary ram
   @param BootFirmwareVolume  Base address of the Boot Firmware Volume.
 **/
+//SecCoreStartup
+//初始化IDT,初始化 SEC PEI 交接的状态信息，以及初始化 debug
+//agent用作SEC/PEI 阶段的源代码调试
 VOID
 NORETURN
 EFIAPI
@@ -250,6 +253,9 @@ SecStartup (
   @param[in] Context    The first input parameter of InitializeDebugAgent().
 
 **/
+//SecStartupPhase2
+//寻找PEI Core的入口地址，并可在远程调试开启的情况下给出 SEC 和
+//PEI 的相关调试信息，然后把控制权交给 PEI Core
 VOID
 NORETURN
 EFIAPI
