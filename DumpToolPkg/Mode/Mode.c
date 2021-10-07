@@ -181,11 +181,12 @@ Mode(IN EFI_HANDLE ImageHandle,
 
 	else if(Argc ==2 && ((StrCmp(Argv[1], L"-AllText") == 0)))
     {
+		UINTN ModeNumber;
 	    Status=LocateSimpleTextInputEx();
 		if(!EFI_ERROR (Status))
 		{
-			UINTN ModeNumber;
-			for(ModeNumber = 0; ModeNumber < gST->ConOut->Mode->MaxMode; ModeNumber++)
+			
+			for(ModeNumber = 0; ModeNumber < (UINTN)(gST->ConOut->Mode->MaxMode); ModeNumber++)
 			{
 				ShowSpecifyTextModeInfo(ModeNumber);
 			}
