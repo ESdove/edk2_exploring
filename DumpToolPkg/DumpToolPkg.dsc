@@ -34,8 +34,8 @@
   TimerLib|MdePkg/Library/BaseTimerLibNullTemplate/BaseTimerLibNullTemplate.inf
 
   UefiDriverEntryPoint|MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint.inf
-  # DebugLib|MdeModulePkg/Library/PeiDxeDebugLibReportStatusCode/PeiDxeDebugLibReportStatusCode.inf
-  DebugLib|MdeModulePkg/Library/UefiDebugLibConOut/UefiDebugLibConOut.inf
+  #DebugLib|MdeModulePkg/Library/PeiDxeDebugLibReportStatusCode/PeiDxeDebugLibReportStatusCode.inf
+  DebugLib|MdePkg/Library/UefiDebugLibConOut/UefiDebugLibConOut.inf
   ReportStatusCodeLib|MdeModulePkg/Library/DxeReportStatusCodeLib/DxeReportStatusCodeLib.inf
   DebugPrintErrorLevelLib|MdePkg/Library/BaseDebugPrintErrorLevelLib/BaseDebugPrintErrorLevelLib.inf
 
@@ -45,6 +45,7 @@
   IntrinsicLib|CryptoPkg/Library/IntrinsicLib/IntrinsicLib.inf
   OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLib.inf
   RngLib|MdePkg/Library/BaseRngLibTimerLib/BaseRngLibTimerLib.inf
+  RegisterFilterLib|MdePkg/Library/RegisterFilterLibNull/RegisterFilterLibNull.inf
   
 
 [LibraryClasses.common.PEIM]
@@ -91,7 +92,7 @@
   DumpToolPkg/StackUsage/StackUsage.inf
   DumpToolPkg/UsbInfo/UsbInfo.inf
   DumpToolPkg/BootOption/BootOption.inf
-  DumpToolPkg/PeiCoreDump/PeiCoreDump.inf
+  #DumpToolPkg/PeiCoreDump/PeiCoreDump.inf
   DumpToolPkg/PeiCoreDump/PeiCoreDumpApp.inf
   DumpToolPkg/SimpleTextIn/SimpleTextIn.inf
   DumpToolPkg/Mode/Mode.inf
