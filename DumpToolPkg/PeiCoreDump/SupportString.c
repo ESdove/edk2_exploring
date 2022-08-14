@@ -2,13 +2,13 @@
   Support file for string handling.
 
   Copyright (c) 2015, Intel Corporation. All rights reserved.<BR>
-  This program and the accompanying materials                          
-  are licensed and made available under the terms and conditions of the BSD License         
-  which accompanies this distribution.  The full text of the license may be found at        
-  http://opensource.org/licenses/bsd-license.php                                            
+  This program and the accompanying materials
+  are licensed and made available under the terms and conditions of the BSD License
+  which accompanies this distribution.  The full text of the license may be found at
+  http://opensource.org/licenses/bsd-license.php
 
-  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
-  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.             
+  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 **/
 
@@ -18,8 +18,8 @@
 #include <Library/DebugLib.h>
 #include <Library/MemoryAllocationLib.h>
 
-#define ASCII_IS_HYPHEN(a)               ((a) == '-')
-#define ASCII_IS_NULL(a)                 ((a) == '\0')
+#define ASCII_IS_HYPHEN(a)  ((a) == '-')
+#define ASCII_IS_NULL(a)    ((a) == '\0')
 
 /**
   Convert a unicode char from lower case to upper case,
@@ -33,7 +33,7 @@
 STATIC
 CHAR16
 UnicodeToUpper (
-  IN      CHAR16                    Chr
+  IN      CHAR16  Chr
   )
 {
   return (Chr >= L'a' && Chr <= L'z') ? Chr - (L'a' - L'A') : Chr;
@@ -45,19 +45,20 @@ UnicodeToUpper (
   @param String   String to process
   @param String2  The other string to process
 
-  @return a positive integer if String is lexicall greater than String2; Zero if 
-  the two strings are identical; and a negative interger if String is lexically 
+  @return a positive integer if String is lexicall greater than String2; Zero if
+  the two strings are identical; and a negative interger if String is lexically
   less than String2.
 **/
 STATIC
 INTN
 StriCmp (
-  IN CHAR16   *String,
-  IN CHAR16   *String2
+  IN CHAR16  *String,
+  IN CHAR16  *String2
   )
 {
   while ((*String != L'\0') &&
-         (UnicodeToUpper (*String) == UnicodeToUpper (*String2))) {
+         (UnicodeToUpper (*String) == UnicodeToUpper (*String2)))
+  {
     String++;
     String2++;
   }
@@ -77,17 +78,17 @@ StriCmp (
 **/
 BOOLEAN
 StrEndWith (
-  IN CHAR16                       *Str,
-  IN CHAR16                       *SubStr
+  IN CHAR16  *Str,
+  IN CHAR16  *SubStr
   )
 {
   CHAR16  *Temp;
 
-  if ((Str == NULL) || (SubStr == NULL) || (StrLen(Str) < StrLen(SubStr))) {
+  if ((Str == NULL) || (SubStr == NULL) || (StrLen (Str) < StrLen (SubStr))) {
     return FALSE;
   }
 
-  Temp = Str + StrLen(Str) - StrLen(SubStr);
+  Temp = Str + StrLen (Str) - StrLen (SubStr);
 
   //
   // Compare
@@ -99,8 +100,8 @@ StrEndWith (
   }
 }
 
-CHAR8  *mAsciiLineBuffer          = NULL;
-CHAR8  *mAsciiFieldBuffer         = NULL;
+CHAR8  *mAsciiLineBuffer  = NULL;
+CHAR8  *mAsciiFieldBuffer = NULL;
 
 /**
   Find the first substring.
@@ -112,18 +113,18 @@ CHAR8  *mAsciiFieldBuffer         = NULL;
 **/
 UINTN
 AsciiStrSpn (
-  IN CHAR8                       *String,
-  IN CHAR8                       *CharSet
+  IN CHAR8  *String,
+  IN CHAR8  *CharSet
   )
 {
-  UINTN   Count;
+  UINTN  Count;
   CHAR8  *Str1;
   CHAR8  *Str2;
 
   Count = 0;
 
-  for (Str1 = String; *Str1 != '\0'; Str1 ++) {
-    for (Str2 = CharSet; *Str2 != '\0'; Str2 ++) {
+  for (Str1 = String; *Str1 != '\0'; Str1++) {
+    for (Str2 = CharSet; *Str2 != '\0'; Str2++) {
       if (*Str1 == *Str2) {
         break;
       }
@@ -133,7 +134,7 @@ AsciiStrSpn (
       return Count;
     }
 
-    Count ++;
+    Count++;
   }
 
   return Count;
@@ -150,17 +151,17 @@ AsciiStrSpn (
 **/
 CHAR8 *
 AsciiStrBrk (
-  IN CHAR8                       *String,
-  IN CHAR8                       *CharSet
+  IN CHAR8  *String,
+  IN CHAR8  *CharSet
   )
 {
   CHAR8  *Str1;
   CHAR8  *Str2;
 
-  for (Str1 = String; *Str1 != '\0'; Str1 ++) {
-    for (Str2 = CharSet; *Str2 != '\0'; Str2 ++) {
+  for (Str1 = String; *Str1 != '\0'; Str1++) {
+    for (Str2 = CharSet; *Str2 != '\0'; Str2++) {
       if (*Str1 == *Str2) {
-        return (CHAR8 *) Str1;
+        return (CHAR8 *)Str1;
       }
     }
   }
@@ -180,8 +181,8 @@ AsciiStrBrk (
 **/
 CHAR8 *
 AsciiStrTokenLine (
-  IN CHAR8                       *String OPTIONAL,
-  IN CHAR8                       *CharSet
+  IN CHAR8  *String OPTIONAL,
+  IN CHAR8  *CharSet
   )
 {
   CHAR8  *Begin;
@@ -201,7 +202,7 @@ AsciiStrTokenLine (
   End = AsciiStrBrk (Begin, CharSet);
   if ((End != NULL) && (*End != '\0')) {
     *End = '\0';
-    End ++;
+    End++;
   }
 
   mAsciiLineBuffer = End;
@@ -220,13 +221,12 @@ AsciiStrTokenLine (
 **/
 CHAR8 *
 AsciiStrTokenField (
-  IN CHAR8                       *String OPTIONAL,
-  IN CHAR8                       *CharSet
+  IN CHAR8  *String OPTIONAL,
+  IN CHAR8  *CharSet
   )
 {
   CHAR8  *Begin;
   CHAR8  *End;
-
 
   Begin = (String == NULL) ? mAsciiFieldBuffer : String;
   if (Begin == NULL) {
@@ -241,7 +241,7 @@ AsciiStrTokenField (
   End = AsciiStrBrk (Begin, CharSet);
   if ((End != NULL) && (*End != '\0')) {
     *End = '\0';
-    End ++;
+    End++;
   }
 
   mAsciiFieldBuffer = End;
@@ -261,11 +261,12 @@ AsciiStrTokenField (
 **/
 CHAR8 *
 AsciiStrGetNewTokenLine (
-  IN CHAR8                       *String,
-  IN CHAR8                       *CharSet
+  IN CHAR8  *String,
+  IN CHAR8  *CharSet
   )
 {
-  CHAR8 *Buf;
+  CHAR8  *Buf;
+
   Buf = AsciiStrTokenLine (String, CharSet);
   while (Buf != NULL) {
     if (AsciiStrCmp (Buf, "") == 0) {
@@ -275,6 +276,7 @@ AsciiStrGetNewTokenLine (
       break;
     }
   }
+
   return Buf;
 }
 
@@ -290,10 +292,11 @@ AsciiStrGetNewTokenLine (
 **/
 CHAR8 *
 AsciiStrGetNextTokenLine (
-  IN CHAR8                       *CharSet
+  IN CHAR8  *CharSet
   )
 {
-  CHAR8 *Buf;
+  CHAR8  *Buf;
+
   Buf = AsciiStrTokenLine (NULL, CharSet);
   while (Buf != NULL) {
     if (AsciiStrCmp (Buf, "") == 0) {
@@ -303,6 +306,7 @@ AsciiStrGetNextTokenLine (
       break;
     }
   }
+
   return Buf;
 }
 
@@ -319,11 +323,12 @@ AsciiStrGetNextTokenLine (
 **/
 CHAR8 *
 AsciiStrGetNewTokenField (
-  IN CHAR8                       *String,
-  IN CHAR8                       *CharSet
+  IN CHAR8  *String,
+  IN CHAR8  *CharSet
   )
 {
-  CHAR8 *Buf;
+  CHAR8  *Buf;
+
   Buf = AsciiStrTokenField (String, CharSet);
   while (Buf != NULL) {
     if (AsciiStrCmp (Buf, "") == 0) {
@@ -333,6 +338,7 @@ AsciiStrGetNewTokenField (
       break;
     }
   }
+
   return Buf;
 }
 
@@ -348,10 +354,11 @@ AsciiStrGetNewTokenField (
 **/
 CHAR8 *
 AsciiStrGetNextTokenField (
-  IN CHAR8                       *CharSet
+  IN CHAR8  *CharSet
   )
 {
-  CHAR8 *Buf;
+  CHAR8  *Buf;
+
   Buf = AsciiStrTokenField (NULL, CharSet);
   while (Buf != NULL) {
     if (AsciiStrCmp (Buf, "") == 0) {
@@ -361,5 +368,6 @@ AsciiStrGetNextTokenField (
       break;
     }
   }
+
   return Buf;
 }

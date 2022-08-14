@@ -25,8 +25,8 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 #define GUID_STRING_LENGTH_MAX  64
 typedef struct {
-  EFI_GUID   Guid;
-  CHAR8      Str[GUID_STRING_LENGTH_MAX];
+  EFI_GUID    Guid;
+  CHAR8       Str[GUID_STRING_LENGTH_MAX];
 } EFI_GUID_STRING;
 
 EFI_GUID_STRING  *mGuidString;
@@ -34,37 +34,37 @@ UINTN            mGuidStringCountMax;
 UINTN            mGuidStringCount;
 
 VOID
-AddGuidName(
-  IN CHAR8    *GuidStr,
-  IN CHAR8    *NameStr
+AddGuidName (
+  IN CHAR8  *GuidStr,
+  IN CHAR8  *NameStr
   )
 {
   EFI_GUID    Guid;
   EFI_STATUS  Status;
 
   if (mGuidStringCount >= mGuidStringCountMax) {
-    ASSERT(FALSE);
+    ASSERT (FALSE);
     return;
   }
 
-  Status = AsciiStrToGuid(GuidStr, &Guid);
-  if (EFI_ERROR(Status)) {
+  Status = AsciiStrToGuid (GuidStr, &Guid);
+  if (EFI_ERROR (Status)) {
     return;
   }
 
-  if (AsciiStrCmp(GuidStr, "00000000-0000-0000-0000-000000000000") == 0) {
-    CopyGuid(&mGuidString[mGuidStringCount].Guid, &Guid);
-    AsciiStrnCpyS(mGuidString[mGuidStringCount].Str, sizeof(mGuidString[mGuidStringCount].Str), "ZeroGuid", sizeof(mGuidString[mGuidStringCount].Str) - 1);
+  if (AsciiStrCmp (GuidStr, "00000000-0000-0000-0000-000000000000") == 0) {
+    CopyGuid (&mGuidString[mGuidStringCount].Guid, &Guid);
+    AsciiStrnCpyS (mGuidString[mGuidStringCount].Str, sizeof (mGuidString[mGuidStringCount].Str), "ZeroGuid", sizeof (mGuidString[mGuidStringCount].Str) - 1);
   } else {
-    CopyGuid(&mGuidString[mGuidStringCount].Guid, &Guid);
-    AsciiStrnCpyS(mGuidString[mGuidStringCount].Str, sizeof(mGuidString[mGuidStringCount].Str), NameStr, sizeof(mGuidString[mGuidStringCount].Str) - 1);
+    CopyGuid (&mGuidString[mGuidStringCount].Guid, &Guid);
+    AsciiStrnCpyS (mGuidString[mGuidStringCount].Str, sizeof (mGuidString[mGuidStringCount].Str), NameStr, sizeof (mGuidString[mGuidStringCount].Str) - 1);
   }
 
   mGuidStringCount++;
 }
 
 VOID
-InitGuid(
+InitGuid (
   VOID
   )
 {
@@ -76,8 +76,8 @@ InitGuid(
   CHAR8       *NameStr;
   UINTN       Index;
 
-  Status = ReadFileToBuffer(L"Guid.xref", &BufferSize, &Buffer);
-  if (EFI_ERROR(Status)) {
+  Status = ReadFileToBuffer (L"Guid.xref", &BufferSize, &Buffer);
+  if (EFI_ERROR (Status)) {
     return;
   }
 
@@ -87,53 +87,55 @@ InitGuid(
       mGuidStringCountMax++;
     }
   }
+
   mGuidStringCountMax++;
-  mGuidString = AllocateZeroPool(mGuidStringCountMax * sizeof(EFI_GUID_STRING));
+  mGuidString = AllocateZeroPool (mGuidStringCountMax * sizeof (EFI_GUID_STRING));
   if (mGuidString == NULL) {
     return;
   }
 
-  LineBuffer = AsciiStrGetNewTokenLine(Buffer, "\n\r");
+  LineBuffer = AsciiStrGetNewTokenLine (Buffer, "\n\r");
   while (LineBuffer != NULL) {
-    GuidStr = AsciiStrGetNewTokenField(LineBuffer, " ");
-    NameStr = AsciiStrGetNextTokenField(" ");
-    if (GuidStr != NULL && NameStr != NULL) {
-      AddGuidName(GuidStr, NameStr);
+    GuidStr = AsciiStrGetNewTokenField (LineBuffer, " ");
+    NameStr = AsciiStrGetNextTokenField (" ");
+    if ((GuidStr != NULL) && (NameStr != NULL)) {
+      AddGuidName (GuidStr, NameStr);
     }
-    LineBuffer = AsciiStrGetNextTokenLine("\n\r");
+
+    LineBuffer = AsciiStrGetNextTokenLine ("\n\r");
   }
 
-  FreePool(Buffer);
+  FreePool (Buffer);
 
   return;
 }
 
-CHAR8 mGuidName[sizeof("12345678-1234-1234-1234-1234567890AB")];
+CHAR8  mGuidName[sizeof ("12345678-1234-1234-1234-1234567890AB")];
 
 CHAR8 *
-GuidToName(
+GuidToName (
   IN EFI_GUID  *Guid
   )
 {
   UINTN  Index;
 
   for (Index = 0; Index < mGuidStringCount; Index++) {
-    if (CompareGuid(&mGuidString[Index].Guid, Guid)) {
+    if (CompareGuid (&mGuidString[Index].Guid, Guid)) {
       return mGuidString[Index].Str;
     }
   }
 
-  AsciiSPrint(mGuidName, sizeof(mGuidName), "%g", Guid);
+  AsciiSPrint (mGuidName, sizeof (mGuidName), "%g", Guid);
 
   return mGuidName;
 }
 
 VOID
-DeinitGuid(
+DeinitGuid (
   VOID
   )
 {
   if (mGuidString != NULL) {
-    FreePool(mGuidString);
+    FreePool (mGuidString);
   }
 }

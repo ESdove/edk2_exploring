@@ -1,4 +1,3 @@
-
 #include <Uefi.h>
 #include <PiDxe.h>
 #include <Library/BaseLib.h>
@@ -12,23 +11,23 @@
 #include <Protocol/Decompress.h>
 #include <IndustryStandard/Pci.h>
 
-#define MAJOR_VERSION   1
-#define MINOR_VERSION   0
+#define MAJOR_VERSION  1
+#define MINOR_VERSION  0
 
-CHAR16 mPciOpromFileName[16];
+CHAR16  mPciOpromFileName[16];
 
-CONST SHELL_PARAM_ITEM GetPciOpromParamList[] = {
-  {L"-?", TypeFlag},
-  {L"-h", TypeFlag},
-  {L"-H", TypeFlag},
-  {L"-v", TypeFlag},
-  {L"-V", TypeFlag},
-  {L"-f", TypeFlag},
-  {L"-F", TypeFlag},
-  {L"-i", TypeFlag},
-  {L"-I", TypeFlag},
-  {NULL , TypeMax }
-  };
+CONST SHELL_PARAM_ITEM  GetPciOpromParamList[] = {
+  { L"-?", TypeFlag },
+  { L"-h", TypeFlag },
+  { L"-H", TypeFlag },
+  { L"-v", TypeFlag },
+  { L"-V", TypeFlag },
+  { L"-f", TypeFlag },
+  { L"-F", TypeFlag },
+  { L"-i", TypeFlag },
+  { L"-I", TypeFlag },
+  { NULL,  TypeMax  }
+};
 
 /**
    Display current version.
@@ -64,16 +63,16 @@ ShowHelp (
 }
 
 typedef struct {
-  UINT16  Type;
-  CHAR16  *TypeName;
+  UINT16    Type;
+  CHAR16    *TypeName;
 } TYPE_INFO;
 
-TYPE_INFO mMachineTypeInfo[] = {
-  {IMAGE_FILE_MACHINE_I386,             L"IA32"},
-  {IMAGE_FILE_MACHINE_EBC,              L"EBC"},
-  {IMAGE_FILE_MACHINE_X64,              L"X64"},
-  {IMAGE_FILE_MACHINE_ARMTHUMB_MIXED,   L"ARM"},
-  {IMAGE_FILE_MACHINE_ARM64,            L"AARCH64"}
+TYPE_INFO  mMachineTypeInfo[] = {
+  { IMAGE_FILE_MACHINE_I386,           L"IA32"    },
+  { IMAGE_FILE_MACHINE_EBC,            L"EBC"     },
+  { IMAGE_FILE_MACHINE_X64,            L"X64"     },
+  { IMAGE_FILE_MACHINE_ARMTHUMB_MIXED, L"ARM"     },
+  { IMAGE_FILE_MACHINE_ARM64,          L"AARCH64" }
 };
 
 /**
@@ -85,12 +84,12 @@ TYPE_INFO mMachineTypeInfo[] = {
 **/
 CHAR16 *
 GetMachineTypeName (
-  UINT16 MachineType
+  UINT16  MachineType
   )
 {
   UINTN  Index;
 
-  for (Index = 0; Index < sizeof(mMachineTypeInfo)/sizeof(mMachineTypeInfo[0]); Index++) {
+  for (Index = 0; Index < sizeof (mMachineTypeInfo)/sizeof (mMachineTypeInfo[0]); Index++) {
     if (mMachineTypeInfo[Index].Type == MachineType) {
       return mMachineTypeInfo[Index].TypeName;
     }
@@ -99,10 +98,10 @@ GetMachineTypeName (
   return L"<Unknown>";
 }
 
-TYPE_INFO mSubSystemInfo[] = {
-  {EFI_IMAGE_SUBSYSTEM_EFI_APPLICATION,         L"EFI_APPLICATION"},
-  {EFI_IMAGE_SUBSYSTEM_EFI_BOOT_SERVICE_DRIVER, L"EFI_BOOT_SERVICE_DRIVER"},
-  {EFI_IMAGE_SUBSYSTEM_EFI_RUNTIME_DRIVER,      L"EFI_RUNTIME_DRIVER"}
+TYPE_INFO  mSubSystemInfo[] = {
+  { EFI_IMAGE_SUBSYSTEM_EFI_APPLICATION,         L"EFI_APPLICATION"         },
+  { EFI_IMAGE_SUBSYSTEM_EFI_BOOT_SERVICE_DRIVER, L"EFI_BOOT_SERVICE_DRIVER" },
+  { EFI_IMAGE_SUBSYSTEM_EFI_RUNTIME_DRIVER,      L"EFI_RUNTIME_DRIVER"      }
 };
 
 /**
@@ -114,12 +113,12 @@ TYPE_INFO mSubSystemInfo[] = {
 **/
 CHAR16 *
 GetSubSystemName (
-  UINT16 SubSystem
+  UINT16  SubSystem
   )
 {
   UINTN  Index;
 
-  for (Index = 0; Index < sizeof(mSubSystemInfo)/sizeof(mSubSystemInfo[0]); Index++) {
+  for (Index = 0; Index < sizeof (mSubSystemInfo)/sizeof (mSubSystemInfo[0]); Index++) {
     if (mSubSystemInfo[Index].Type == SubSystem) {
       return mSubSystemInfo[Index].TypeName;
     }
@@ -128,9 +127,9 @@ GetSubSystemName (
   return L"<Unknown>";
 }
 
-TYPE_INFO mCodeTypeInfo[] = {
-  {PCI_CODE_TYPE_PCAT_IMAGE,    L"LEGACY"},
-  {PCI_CODE_TYPE_EFI_IMAGE,     L"EFI"}
+TYPE_INFO  mCodeTypeInfo[] = {
+  { PCI_CODE_TYPE_PCAT_IMAGE, L"LEGACY" },
+  { PCI_CODE_TYPE_EFI_IMAGE,  L"EFI"    }
 };
 
 /**
@@ -142,12 +141,12 @@ TYPE_INFO mCodeTypeInfo[] = {
 **/
 CHAR16 *
 GetCodeTypeName (
-  UINT16 CodeType
+  UINT16  CodeType
   )
 {
   UINTN  Index;
 
-  for (Index = 0; Index < sizeof(mCodeTypeInfo)/sizeof(mCodeTypeInfo[0]); Index++) {
+  for (Index = 0; Index < sizeof (mCodeTypeInfo)/sizeof (mCodeTypeInfo[0]); Index++) {
     if (mCodeTypeInfo[Index].Type == CodeType) {
       return mCodeTypeInfo[Index].TypeName;
     }
@@ -169,13 +168,13 @@ GetCodeTypeName (
 **/
 EFI_STATUS
 SavePciOpromToFile (
-  IN CONST CHAR16       *FileName,
-  IN VOID               *Buffer,
-  IN UINTN              BufferSize
+  IN CONST CHAR16  *FileName,
+  IN VOID          *Buffer,
+  IN UINTN         BufferSize
   )
 {
-  EFI_STATUS            Status;
-  SHELL_FILE_HANDLE     FileHandle;
+  EFI_STATUS         Status;
+  SHELL_FILE_HANDLE  FileHandle;
 
   Status = ShellOpenFileByName (FileName, &FileHandle, EFI_FILE_MODE_WRITE | EFI_FILE_MODE_READ, 0);
   if (!EFI_ERROR (Status)) {
@@ -228,26 +227,26 @@ SavePciOpromToFile (
 **/
 VOID
 ProcessPciRomImage (
-  IN VOID       *RomImage,
-  IN UINTN      RomSize,
-  IN BOOLEAN    Save
+  IN VOID     *RomImage,
+  IN UINTN    RomSize,
+  IN BOOLEAN  Save
   )
 {
-  EFI_STATUS                        Status;
-  UINT8                             *RomEntry;
-  UINTN                             RomOffset;
-  EFI_PCI_EXPANSION_ROM_HEADER      *EfiRomHeader;
-  EFI_LEGACY_EXPANSION_ROM_HEADER   *LegacyRomHeader;
-  PCI_3_0_DATA_STRUCTURE            *Pcir;
-  UINTN                             Index;
-  UINT16                            *DeviceIdList;
-  VOID                              *Image;
-  UINT32                            ImageSize;
-  VOID                              *Destination;
-  UINT32                            DestinationSize;
-  VOID                              *Scratch;
-  UINT32                            ScratchSize;
-  EFI_DECOMPRESS_PROTOCOL           *Decompress;
+  EFI_STATUS                       Status;
+  UINT8                            *RomEntry;
+  UINTN                            RomOffset;
+  EFI_PCI_EXPANSION_ROM_HEADER     *EfiRomHeader;
+  EFI_LEGACY_EXPANSION_ROM_HEADER  *LegacyRomHeader;
+  PCI_3_0_DATA_STRUCTURE           *Pcir;
+  UINTN                            Index;
+  UINT16                           *DeviceIdList;
+  VOID                             *Image;
+  UINT32                           ImageSize;
+  VOID                             *Destination;
+  UINT32                           DestinationSize;
+  VOID                             *Scratch;
+  UINT32                           ScratchSize;
+  EFI_DECOMPRESS_PROTOCOL          *Decompress;
 
   if (RomImage == NULL) {
     ShellPrintEx (-1, -1, L"This PCI device has no OPROM.\n");
@@ -259,22 +258,23 @@ ProcessPciRomImage (
     ShellPrintEx (-1, -1, L"Saved PciOpromAll.bin with size 0x%x\n", RomSize);
   }
 
-  RomEntry = (UINT8 *) RomImage;
-  ASSERT (((EFI_PCI_EXPANSION_ROM_HEADER *) RomEntry)->Signature == PCI_EXPANSION_ROM_HEADER_SIGNATURE);
+  RomEntry = (UINT8 *)RomImage;
+  ASSERT (((EFI_PCI_EXPANSION_ROM_HEADER *)RomEntry)->Signature == PCI_EXPANSION_ROM_HEADER_SIGNATURE);
 
   Index = 0;
   do {
-    RomOffset = (UINTN) RomEntry - (UINTN) RomImage;
+    RomOffset = (UINTN)RomEntry - (UINTN)RomImage;
     if (RomOffset >= RomSize) {
       break;
     }
-    EfiRomHeader = (EFI_PCI_EXPANSION_ROM_HEADER *) RomEntry;
+
+    EfiRomHeader = (EFI_PCI_EXPANSION_ROM_HEADER *)RomEntry;
     if (EfiRomHeader->Signature != PCI_EXPANSION_ROM_HEADER_SIGNATURE) {
       RomEntry += 512;
       continue;
     }
 
-    Pcir = (PCI_3_0_DATA_STRUCTURE *) (RomEntry + EfiRomHeader->PcirOffset);
+    Pcir = (PCI_3_0_DATA_STRUCTURE *)(RomEntry + EfiRomHeader->PcirOffset);
     ASSERT (Pcir->Signature == PCI_DATA_STRUCTURE_SIGNATURE);
 
     ShellPrintEx (-1, -1, L"OPROM (0x%x) (Offset = 0x%x)\n", Index, RomOffset);
@@ -284,19 +284,21 @@ ProcessPciRomImage (
     ShellPrintEx (-1, -1, L"    DeviceId              = 0x%04x\n", Pcir->DeviceId);
     if (Pcir->Revision >= 3) {
       if (Pcir->DeviceListOffset != 0) {
-        DeviceIdList = (UINT16 *) ((UINTN) Pcir + Pcir->DeviceListOffset);
+        DeviceIdList = (UINT16 *)((UINTN)Pcir + Pcir->DeviceListOffset);
         while (*DeviceIdList != 0) {
           ShellPrintEx (-1, -1, L"      DeviceIdList = 0x%x\n", *DeviceIdList);
           DeviceIdList++;
         }
       }
     }
+
     ShellPrintEx (-1, -1, L"    Revision              = 0x%x\n", Pcir->Revision);
-    ShellPrintEx (-1, -1, L"    ClassCode             = 0x%06x\n", (*(UINT32 *) Pcir->ClassCode) & 0x00FFFFFF);
+    ShellPrintEx (-1, -1, L"    ClassCode             = 0x%06x\n", (*(UINT32 *)Pcir->ClassCode) & 0x00FFFFFF);
     ShellPrintEx (-1, -1, L"    ImageLength           = 0x%x\n", Pcir->ImageLength);
     if (Pcir->Revision >= 3) {
       ShellPrintEx (-1, -1, L"    MaxRuntimeImageLength = 0x%x\n", Pcir->MaxRuntimeImageLength);
     }
+
     ShellPrintEx (-1, -1, L"    Indicator             = 0x%x\n", Pcir->Indicator);
     ShellPrintEx (-1, -1, L"    CodeType              = 0x%x (%s)\n", Pcir->CodeType, GetCodeTypeName (Pcir->CodeType));
 
@@ -304,11 +306,11 @@ ProcessPciRomImage (
       //
       // It is a LEGACY OPROM entry.
       //
-      LegacyRomHeader = (EFI_LEGACY_EXPANSION_ROM_HEADER *) EfiRomHeader;
+      LegacyRomHeader = (EFI_LEGACY_EXPANSION_ROM_HEADER *)EfiRomHeader;
       ShellPrintEx (-1, -1, L"  EFI_LEGACY_EXPANSION_ROM_HEADER:\n");
       ShellPrintEx (-1, -1, L"    Signature            = 0x%04x\n", LegacyRomHeader->Signature);
       ShellPrintEx (-1, -1, L"    Size512              = 0x%x\n", LegacyRomHeader->Size512);
-      ShellPrintEx (-1, -1, L"    InitEntryPoint       = 0x%06x\n", (*(UINT32 *) LegacyRomHeader->InitEntryPoint) & 0x00FFFFFF);
+      ShellPrintEx (-1, -1, L"    InitEntryPoint       = 0x%06x\n", (*(UINT32 *)LegacyRomHeader->InitEntryPoint) & 0x00FFFFFF);
       ShellPrintEx (-1, -1, L"    PcirOffset           = 0x%x\n", LegacyRomHeader->PcirOffset);
       if (Save) {
         SavePciOpromToFile (L"PciOpromLegacy.bin", RomEntry, Pcir->ImageLength * 512);
@@ -329,8 +331,8 @@ ProcessPciRomImage (
 
       UnicodeSPrint (mPciOpromFileName, sizeof (mPciOpromFileName), L"PciOprom%s.efi", GetMachineTypeName (EfiRomHeader->EfiMachineType));
 
-      Image = (VOID *) ((UINTN) EfiRomHeader + EfiRomHeader->EfiImageHeaderOffset);
-      ImageSize = (UINT32) (EfiRomHeader->InitializationSize * 512 - EfiRomHeader->EfiImageHeaderOffset);
+      Image     = (VOID *)((UINTN)EfiRomHeader + EfiRomHeader->EfiImageHeaderOffset);
+      ImageSize = (UINT32)(EfiRomHeader->InitializationSize * 512 - EfiRomHeader->EfiImageHeaderOffset);
 
       if (Save) {
         if (EfiRomHeader->CompressionType != EFI_PCI_EXPANSION_ROM_HEADER_COMPRESSED) {
@@ -343,29 +345,29 @@ ProcessPciRomImage (
           //
           // Compressed.
           //
-          Status = gBS->LocateProtocol (&gEfiDecompressProtocolGuid, NULL, (VOID **) &Decompress);
+          Status = gBS->LocateProtocol (&gEfiDecompressProtocolGuid, NULL, (VOID **)&Decompress);
           ASSERT_EFI_ERROR (Status);
           Status = Decompress->GetInfo (
-                                 Decompress,
-                                 Image,
-                                 ImageSize,
-                                 &DestinationSize,
-                                 &ScratchSize
-                                 );
+                                        Decompress,
+                                        Image,
+                                        ImageSize,
+                                        &DestinationSize,
+                                        &ScratchSize
+                                        );
           ASSERT_EFI_ERROR (Status);
           Destination = AllocatePool (DestinationSize);
           ASSERT (Destination != NULL);
           Scratch = AllocatePool (ScratchSize);
           ASSERT (Scratch != NULL);
           Status = Decompress->Decompress (
-                                 Decompress,
-                                 Image,
-                                 ImageSize,
-                                 Destination,
-                                 DestinationSize,
-                                 Scratch,
-                                 ScratchSize
-                                 );
+                                           Decompress,
+                                           Image,
+                                           ImageSize,
+                                           Destination,
+                                           DestinationSize,
+                                           Scratch,
+                                           ScratchSize
+                                           );
           ASSERT_EFI_ERROR (Status);
           SavePciOpromToFile (mPciOpromFileName, Destination, DestinationSize);
           ShellPrintEx (-1, -1, L"Saved %s with size 0x%x\n", mPciOpromFileName, DestinationSize);
@@ -399,33 +401,33 @@ ProcessPciRomImage (
 **/
 EFI_STATUS
 GetPciOprom (
-  IN UINTN      Bus,
-  IN UINTN      Device,
-  IN UINTN      Function,
-  IN UINTN      VendorId,
-  IN UINTN      DeviceId
+  IN UINTN  Bus,
+  IN UINTN  Device,
+  IN UINTN  Function,
+  IN UINTN  VendorId,
+  IN UINTN  DeviceId
   )
 {
-  EFI_STATUS            Status;
-  UINTN                 PciIoHandleCount;
-  EFI_HANDLE            *PciIoHandleBuffer;
-  UINTN                 Index;
-  EFI_PCI_IO_PROTOCOL   *PciIo;
-  UINT16                PciVendorId;
-  UINT16                PciDeviceId;
-  UINTN                 PciSegment;
-  UINTN                 PciBus;
-  UINTN                 PciDevice;
-  UINTN                 PciFunction;
-  BOOLEAN               Found;
+  EFI_STATUS           Status;
+  UINTN                PciIoHandleCount;
+  EFI_HANDLE           *PciIoHandleBuffer;
+  UINTN                Index;
+  EFI_PCI_IO_PROTOCOL  *PciIo;
+  UINT16               PciVendorId;
+  UINT16               PciDeviceId;
+  UINTN                PciSegment;
+  UINTN                PciBus;
+  UINTN                PciDevice;
+  UINTN                PciFunction;
+  BOOLEAN              Found;
 
   Status = gBS->LocateHandleBuffer (
-                  ByProtocol,
-                  &gEfiPciIoProtocolGuid,
-                  NULL,
-                  &PciIoHandleCount,
-                  &PciIoHandleBuffer
-                  );
+                                    ByProtocol,
+                                    &gEfiPciIoProtocolGuid,
+                                    NULL,
+                                    &PciIoHandleCount,
+                                    &PciIoHandleBuffer
+                                    );
   if (EFI_ERROR (Status)) {
     ShellPrintEx (-1, -1, L"%a: %EError. %NNo any PCI device is found.\n", __FUNCTION__);
     return Status;
@@ -434,10 +436,10 @@ GetPciOprom (
   Found = FALSE;
   for (Index = 0; Index < PciIoHandleCount; Index++) {
     Status = gBS->HandleProtocol (
-                    PciIoHandleBuffer[Index],
-                    &gEfiPciIoProtocolGuid,
-                    (VOID**) &PciIo
-                    );
+                                  PciIoHandleBuffer[Index],
+                                  &gEfiPciIoProtocolGuid,
+                                  (VOID **)&PciIo
+                                  );
     ASSERT_EFI_ERROR (Status);
 
     Status = PciIo->GetLocation (PciIo, &PciSegment, &PciBus, &PciDevice, &PciFunction);
@@ -453,33 +455,35 @@ GetPciOprom (
         ((Device   == 0x20)   || (Device   == PciDevice)) &&
         ((Function == 0x8)    || (Function == PciFunction)) &&
         ((VendorId == 0xFFFF) || (VendorId == PciVendorId)) &&
-        ((DeviceId == 0xFFFF) || (DeviceId == PciDeviceId))) {
+        ((DeviceId == 0xFFFF) || (DeviceId == PciDeviceId)))
+    {
       Found = TRUE;
       ShellPrintEx (
-        -1,
-        -1,
-        L"\nPCI device (B%02xD%02xF%02x) (%04x:%04x)\n",
-        PciBus,
-        PciDevice,
-        PciFunction,
-        PciVendorId,
-        PciDeviceId
-        );
+                    -1,
+                    -1,
+                    L"\nPCI device (B%02xD%02xF%02x) (%04x:%04x)\n",
+                    PciBus,
+                    PciDevice,
+                    PciFunction,
+                    PciVendorId,
+                    PciDeviceId
+                    );
       if ((Bus      == 0x100) &&
           (Device   == 0x20) &&
           (Function == 0x8) &&
           (VendorId == 0xFFFF) &&
-          (DeviceId == 0xFFFF)) {
+          (DeviceId == 0xFFFF))
+      {
         //
         // It is to dump PCI OPROM information for all PCI devices.
         //
-        ProcessPciRomImage (PciIo->RomImage, (UINTN) PciIo->RomSize, FALSE);
+        ProcessPciRomImage (PciIo->RomImage, (UINTN)PciIo->RomSize, FALSE);
       } else {
         //
         // It is to dump PCI OPROM information and save PCI OPROM to file
         // for the specific PCI device.
         //
-        ProcessPciRomImage (PciIo->RomImage, (UINTN) PciIo->RomSize, TRUE);
+        ProcessPciRomImage (PciIo->RomImage, (UINTN)PciIo->RomSize, TRUE);
         break;
       }
     }
@@ -513,22 +517,22 @@ GetPciOpromMain (
   IN EFI_SYSTEM_TABLE  *SystemTable
   )
 {
-  EFI_STATUS            Status;
-  LIST_ENTRY            *ParamPackage;
-  CHAR16                *ParamProblem;
-  CONST CHAR16          *CmdLineArg;
-  UINTN                 Bus;
-  UINTN                 Device;
-  UINTN                 Function;
-  UINTN                 VendorId;
-  UINTN                 DeviceId;
+  EFI_STATUS    Status;
+  LIST_ENTRY    *ParamPackage;
+  CHAR16        *ParamProblem;
+  CONST CHAR16  *CmdLineArg;
+  UINTN         Bus;
+  UINTN         Device;
+  UINTN         Function;
+  UINTN         VendorId;
+  UINTN         DeviceId;
 
   ParamPackage = NULL;
-  Bus = 0x100;
-  Device = 0x20;
-  Function = 0x8;
-  VendorId = 0xFFFF;
-  DeviceId = 0xFFFF;
+  Bus          = 0x100;
+  Device       = 0x20;
+  Function     = 0x8;
+  VendorId     = 0xFFFF;
+  DeviceId     = 0xFFFF;
 
   //
   // initialize the shell lib (we must be in non-auto-init...)
@@ -547,6 +551,7 @@ GetPciOpromMain (
     } else {
       ShellPrintEx (-1, -1, L"%a: %EError. %NThe input parameters are not recognized.\n", __FUNCTION__);
     }
+
     Status = EFI_INVALID_PARAMETER;
   } else {
     if (ShellCommandLineGetCount (ParamPackage) > 4) {
@@ -554,26 +559,30 @@ GetPciOpromMain (
       Status = EFI_INVALID_PARAMETER;
     } else if (ShellCommandLineGetFlag (ParamPackage, L"-?")  ||
                ShellCommandLineGetFlag (ParamPackage, L"-h")  ||
-               ShellCommandLineGetFlag (ParamPackage, L"-H")) {
+               ShellCommandLineGetFlag (ParamPackage, L"-H"))
+    {
       //
       // check for "-?" help information.
       //
       ShowHelp ();
       goto Done;
     } else if (ShellCommandLineGetFlag (ParamPackage, L"-v") ||
-               ShellCommandLineGetFlag (ParamPackage, L"-V")) {
+               ShellCommandLineGetFlag (ParamPackage, L"-V"))
+    {
       //
       // check for "-v" for version inforamtion.
       //
       ShowVersion ();
       goto Done;
     } else if (ShellCommandLineGetFlag (ParamPackage, L"-f")  ||
-               ShellCommandLineGetFlag (ParamPackage, L"-F")) {
+               ShellCommandLineGetFlag (ParamPackage, L"-F"))
+    {
       if (ShellCommandLineGetCount (ParamPackage) != 4) {
         ShellPrintEx (-1, -1, L"%a: %EError. %NIncorrect parameter count for -f/-F.\n", __FUNCTION__);
         Status = EFI_INVALID_PARAMETER;
         goto Done;
       }
+
       CmdLineArg = ShellCommandLineGetRawValue (ParamPackage, 1);
       if (CmdLineArg != NULL) {
         Bus = StrDecimalToUintn (CmdLineArg);
@@ -583,6 +592,7 @@ GetPciOpromMain (
           goto Done;
         }
       }
+
       CmdLineArg = ShellCommandLineGetRawValue (ParamPackage, 2);
       if (CmdLineArg != NULL) {
         Device = StrDecimalToUintn (CmdLineArg);
@@ -592,6 +602,7 @@ GetPciOpromMain (
           goto Done;
         }
       }
+
       CmdLineArg = ShellCommandLineGetRawValue (ParamPackage, 3);
       if (CmdLineArg != NULL) {
         Function = StrDecimalToUintn (CmdLineArg);
@@ -602,12 +613,14 @@ GetPciOpromMain (
         }
       }
     } else if (ShellCommandLineGetFlag (ParamPackage, L"-i")  ||
-               ShellCommandLineGetFlag (ParamPackage, L"-I")) {
+               ShellCommandLineGetFlag (ParamPackage, L"-I"))
+    {
       if (ShellCommandLineGetCount (ParamPackage) != 3) {
         ShellPrintEx (-1, -1, L"%a: %EError. %NIncorrect parameter count for -i/-I.\n", __FUNCTION__);
         Status = EFI_INVALID_PARAMETER;
         goto Done;
       }
+
       CmdLineArg = ShellCommandLineGetRawValue (ParamPackage, 1);
       if (CmdLineArg != NULL) {
         VendorId = StrHexToUintn (CmdLineArg);
@@ -617,6 +630,7 @@ GetPciOpromMain (
           goto Done;
         }
       }
+
       CmdLineArg = ShellCommandLineGetRawValue (ParamPackage, 2);
       if (CmdLineArg != NULL) {
         DeviceId = StrHexToUintn (CmdLineArg);
@@ -648,4 +662,3 @@ Done:
 
   return Status;
 }
-
